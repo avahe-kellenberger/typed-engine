@@ -1,10 +1,7 @@
 import { GameObject } from '../../src/entity/GameObject';
 import { HeadlessGame } from '../../src/HeadlessGame';
-import { Vector2D } from '../../src/math/Vector2D';
-import { Camera } from '../../src/scene/Camera';
 
-const camera: Camera = new Camera(new Vector2D(800, 600));
-const game: HeadlessGame = new HeadlessGame(camera);
+const game: HeadlessGame = new HeadlessGame();
 
 describe(`HeadlessGame`, () => {
     it(`GameObject should be updated but not rendered`, () => {
