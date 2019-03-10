@@ -71,13 +71,13 @@ export class Vector2D {
     }
 
     /**
-     * @param digits The number of digits after the decimal point.
+     * @param digitCount The number of digits after the decimal point.
      * @return A new vector with limited digits after the decimal point.
      * @see `Number.toFixed()`
      */
-    public toFixed(digits: number): Vector2D {
-        return new Vector2D(Number.parseFloat(this.x.toFixed(digits)),
-                            Number.parseFloat(this.y.toFixed(digits)));
+    public toFixed(digitCount: number): Vector2D {
+        return new Vector2D(Number.parseFloat(this.x.toFixed(digitCount)),
+                            Number.parseFloat(this.y.toFixed(digitCount)));
     }
 
     /**
