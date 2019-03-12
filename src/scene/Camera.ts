@@ -1,13 +1,16 @@
 import { Entity } from '../entity/Entity';
+import { ZOrder, ZOrderListener } from '../entity/ZOrder';
 import { Rectangle } from '../math/geom/Rectangle';
 import { Vector2D } from '../math/Vector2D';
 
 /**
  * The camera which views the game.
  */
-export class Camera extends Entity {
+export class Camera extends Entity implements ZOrder {
 
     private viewport: Rectangle;
+    private zOrder: number;
+    private zOrderListeners: Set<ZOrderListener>|undefined;
     
     /**
      * @param viewportSize The size of the canvas being viewed by the camera.
@@ -15,8 +18,9 @@ export class Camera extends Entity {
      * @param zOrder The object's Z order.
      */
     constructor(viewportSize: Vector2D, location: Vector2D = Vector2D.ZERO, zOrder: number = 0) {
-        super(location, zOrder);
+        super(location);
         this.viewport = this.createViewport(viewportSize);
+        this.zOrder = zOrder;
         this.addLocationListener((_, delta) => this.moveViewport(delta));
     }
 
@@ -62,6 +66,57 @@ export class Camera extends Entity {
         return true;
     }
 
+    // #endregion
+
+    // #region ZOrder
+
+    /**
+     * @override
+     */
+    public getZOrder(): number {
+        return this.zOrder;
+    }
+
+    /**
+     * @override
+     */
+    public setZOrder(z: number): void {
+        if (this.zOrder === z) {
+            return;
+        }
+        const oldZ: number = this.zOrder;
+        this.zOrder = z;
+        if (this.zOrderListeners !== undefined) {
+            this.zOrderListeners.forEach(listener => listener(oldZ, this.zOrder));
+        }
+    }
+        
+    /**
+     * @override
+     */
+    public addZOrderListener(listener: ZOrderListener): boolean {
+        if (this.zOrderListeners === undefined) {
+            this.zOrderListeners = new Set();
+        }
+        return this.zOrderListeners.size !== this.zOrderListeners.add(listener).size;
+    }
+
+    /**
+     * @override
+     */
+    public containsZOrderListener(listener: ZOrderListener): boolean {
+        return this.zOrderListeners !== undefined &&
+               this.zOrderListeners.has(listener);
+    }
+        
+    /**
+     * @override
+     */
+    public removeZOrderListener(listener: ZOrderListener): boolean {
+        return this.zOrderListeners !== undefined &&
+               this.zOrderListeners.delete(listener);
+    }
+        
     // #endregion
 
 }
