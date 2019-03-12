@@ -1,4 +1,5 @@
 module.exports = {
+    
     // An array of file extensions your modules use
     moduleFileExtensions: ['js', 'ts', 'tsx'],
 
@@ -11,5 +12,10 @@ module.exports = {
     // A map from regular expressions to paths to transformers
     transform: {
         '\\.(ts|tsx)$': '<rootDir>/node_modules/ts-jest/preprocessor.js'
-    }
+    },
+
+    testEnvironment: 'jsdom',
+
+    setupFiles: ["<rootDir>/test/setup.ts"]
+
 };
