@@ -127,6 +127,20 @@ export class Rectangle implements ILocatable {
     }
 
     /**
+     * @return The width of the rectangle.
+     */
+    public getWidth(): number {
+        return this.size.x;
+    }
+
+    /**
+     * @return The height of the rectangle.
+     */
+    public getHeight(): number {
+        return this.size.y;
+    }
+
+    /**
      * @param point The point to check.
      * @return If the point lies within the rectangle.
      */
