@@ -34,6 +34,16 @@ export class CanvasUtils {
     }
 
     /**
+     * @param image The image to transform into a canvas.
+     * @return A canvas version of the given image.
+     */
+    public static imageToCanvas(image: HTMLImageElement): HTMLCanvasElement {
+        return CanvasUtils.create(image.width, image.height, ctx => {
+            ctx.drawImage(image, 0, 0);
+        });
+    }
+
+    /**
      * Splits a canvas into equal parts.
      * @param canvas The canvas to split.
      * @param columns The number of columns to split into.
