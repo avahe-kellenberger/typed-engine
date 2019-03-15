@@ -29,16 +29,15 @@ export class Rectangle implements ILocatable {
      * Overload constructor.
      */
     constructor(topLeft: Vector2D, sizeOrWidth: Vector2D|number, height?: number) {
-        this.center = topLeft;
         if (sizeOrWidth instanceof Vector2D) {
             this.size = sizeOrWidth;
-            this.halfSize = sizeOrWidth.scale(0.5);
         } else if (height !== undefined) {
             this.size = new Vector2D(sizeOrWidth, height);
-            this.halfSize = this.size.scale(0.5);
         } else {
             throw new Error(`Illegal argument height: ${height}`);
         }
+        this.halfSize = this.size.scale(0.5);
+        this.center = topLeft.add(this.halfSize);
     }
 
     /**
@@ -80,7 +79,7 @@ export class Rectangle implements ILocatable {
      * @return This rectangle's top left location.
      */
     public getTopLeft(): Vector2D {
-        return this.center.add(this.halfSize);
+        return this.center.subtract(this.halfSize);
     }
 
     /**
