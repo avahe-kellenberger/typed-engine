@@ -78,6 +78,7 @@ export class Game extends HeadlessGame implements Renderable {
      * @override
      */
     public render(ctx: CanvasRenderingContext2D, camera: Camera, callback?: RenderableCallback): void {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         if (this.content !== undefined) {
             this.content.render(ctx, camera, callback);
         }
