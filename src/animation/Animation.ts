@@ -1,13 +1,17 @@
+/**
+ * Animations use HTMLCanvasElements to render loaded images.
+ * This allows for higher flexibility when dealing with image data.
+ */
 export class Animation {
 
     private readonly frames: AnimationFrame[];
     private readonly animationDuration: number;
 
     /**
-     * Constructs a single-image animation.
-     * @param image The image of the animation.
+     * Constructs a single-canvas animation.
+     * @param canvas The canvas of the animation.
      */
-    constructor(image: HTMLImageElement);
+    constructor(canvas: HTMLCanvasElement);
 
     /**
      * @param frames The frames of the animation to be displayed.
@@ -17,15 +21,15 @@ export class Animation {
     /**
      * Overload constructor.
      */
-    constructor(imageOrFrames: HTMLImageElement|AnimationFrame[]) {
-        if (imageOrFrames instanceof HTMLImageElement) {
+    constructor(canvasOrFrames: HTMLCanvasElement|AnimationFrame[]) {
+        if (canvasOrFrames instanceof HTMLCanvasElement) {
             const singleFrame: AnimationFrame = {
-                image: imageOrFrames,
+                canvas: canvasOrFrames,
                 duration: 1.0
             };
             this.frames = [singleFrame];
         } else {
-            this.frames = imageOrFrames;
+            this.frames = canvasOrFrames;
         }
         let collectiveDuration: number = 0;
         this.frames.forEach(frame => collectiveDuration += frame.duration);
@@ -75,17 +79,17 @@ export class Animation {
     // #region Static Methods
 
     /**
-     * Creates an animation in the order of the given images,
+     * Creates an animation in the order of the given canvases,
      * using the same duration for each AnimationFrame.
      *  
-     * @param images The ordered images for the frames to create.
+     * @param canvases The ordered canvases for the frames to create.
      * @param frameDuration The duration of each frame.
      */
-    public static createAnimation(images: HTMLImageElement[], frameDuration: number): Animation {
+    public static createAnimation(canvases: HTMLCanvasElement[], frameDuration: number): Animation {
         const frames: AnimationFrame[] = [];
-        images.forEach(image => {
+        canvases.forEach(canvas => {
             frames.push({
-                image: image,
+                canvas: canvas,
                 duration: frameDuration
             });
         });
@@ -101,9 +105,9 @@ export class Animation {
  */
 export interface AnimationFrame {
     /**
-     * The image to be rendered.
+     * The canvas to be rendered.
      */
-    readonly image: HTMLImageElement,
+    readonly canvas: HTMLCanvasElement,
     /**
      * The duration in seconds the frame should be displayed.
      */

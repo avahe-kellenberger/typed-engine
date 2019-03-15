@@ -4,7 +4,7 @@ import { GameObject } from '../../src/entity/GameObject';
 import { Game } from '../../src/Game';
 
 const canvas: HTMLCanvasElement = document.createElement('canvas');
-const game: Game = new Game(canvas);
+const game: Game = new Game(canvas.getContext('2d')!);
 
 describe(`Game`, () => {
     it(`Content should be updated and rendered`, () => {

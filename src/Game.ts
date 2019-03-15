@@ -20,11 +20,25 @@ export class Game extends HeadlessGame implements Renderable {
      * @see `Game.setContent()`
      * @see `Game.start()`
      */
-    constructor(canvas: HTMLCanvasElement, content?: Updatable&Renderable) {
+    constructor(ctx: CanvasRenderingContext2D, content?: Updatable&Renderable) {
         super(content);
-        const canvasSize: Vector2D = new Vector2D(canvas.width, canvas.height);
+        this.ctx = ctx;
+        const canvasSize: Vector2D = new Vector2D(ctx.canvas.width, ctx.canvas.height);
         this.camera = new Camera(canvasSize);
-        this.ctx = canvas.getContext("2d")!;
+
+        const fitCanvas = () => {
+            const canvas: HTMLCanvasElement = ctx.canvas;
+            const canvasParent: HTMLElement|null = canvas.parentElement;
+            if (canvasParent !== null) {
+                const parentBounds = canvasParent.getBoundingClientRect();
+                if (canvas.width !== parentBounds.width || canvas.height !== parentBounds.height) {
+                    canvas.width = parentBounds.width;
+                    canvas.height = parentBounds.height;
+                }
+            }
+        };
+        window.addEventListener('load', fitCanvas);
+        window.addEventListener('resize', fitCanvas);
     }
 
     /**

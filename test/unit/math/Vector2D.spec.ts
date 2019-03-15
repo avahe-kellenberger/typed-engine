@@ -79,7 +79,7 @@ test(`floor`, () => {
 });
 
 describe(`normalize`, () => {
-    const floatingPointErrorMargin: number = 0.000000000000001;
+    const floatingPointErrorMargin: number = 0.00000000000001;
 
     it(`default scales to magnitude of 1`, () => {
         const normal: Vector2D = baseVector.normalize();
