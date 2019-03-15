@@ -1,5 +1,5 @@
-import { Rectangle } from "../math/geom/Rectangle";
-import { Vector2D } from "../math/Vector2D";
+import { Rectangle } from '../math/geom/Rectangle';
+import { Vector2D } from '../math/Vector2D';
 
 export class CanvasUtils {
 

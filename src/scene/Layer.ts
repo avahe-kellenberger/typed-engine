@@ -128,6 +128,10 @@ export class Layer implements ZOrder, Updatable, Renderable {
             return;
         }
         this.renderables.forEach(obj => obj.render(ctx, camera, callback));
+
+        if (callback !== undefined) {
+            callback(ctx, camera);
+        }
     }
 
 }

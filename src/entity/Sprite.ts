@@ -6,6 +6,7 @@ import { Vector2D } from '../math/Vector2D';
 export class Sprite extends GameObject {
 
     private readonly animation: Animation;
+    private runningTime: number;
 
     /**
      * @param canvas The single canvas of the sprite.
@@ -27,6 +28,7 @@ export class Sprite extends GameObject {
         } else {
             this.animation = new Animation(animOrCanvas);
         }
+        this.runningTime = 0;
     }
 
     /**
@@ -39,9 +41,21 @@ export class Sprite extends GameObject {
     /**
      * @override
      */
+    public update(elapsedTime: number): void {
+        super.update(elapsedTime);
+        this.runningTime += elapsedTime;
+        this.runningTime %= this.animation.getDuration();
+    }
+
+    /**
+     * @override
+     */
     public render(ctx: CanvasRenderingContext2D, camera: Camera): void {
         super.render(ctx, camera, () => {
-            ctx.drawImage(this.animation.getFrameAtIndex(0).canvas, 0, 0);
+            const frame: HTMLCanvasElement = this.animation.getFrameAtTime(this.runningTime).canvas;
+            const offsetX: number = frame.width * -0.5;
+            const offsetY: number = frame.height * -0.5;
+            ctx.drawImage(frame, offsetX, offsetY);
         });
     }
 }

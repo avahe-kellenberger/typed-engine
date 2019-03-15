@@ -75,6 +75,10 @@ export class Scene implements Updatable, Renderable {
         this.sortLayers().forEach(layer => {
             layer.render(ctx, camera, callback);
         });
+
+        if (callback !== undefined) {
+            callback(ctx, camera);
+        }
     }
 
 }
