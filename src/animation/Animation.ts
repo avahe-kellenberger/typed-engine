@@ -8,29 +8,10 @@ export class Animation {
     private readonly animationDuration: number;
 
     /**
-     * Constructs a single-canvas animation.
-     * @param canvas The canvas of the animation.
-     */
-    constructor(canvas: HTMLCanvasElement);
-
-    /**
      * @param frames The frames of the animation to be displayed.
      */
-    constructor(frames: AnimationFrame[]);
-
-    /**
-     * Overload constructor.
-     */
-    constructor(canvasOrFrames: HTMLCanvasElement|AnimationFrame[]) {
-        if (canvasOrFrames instanceof HTMLCanvasElement) {
-            const singleFrame: AnimationFrame = {
-                canvas: canvasOrFrames,
-                duration: 1.0
-            };
-            this.frames = [singleFrame];
-        } else {
-            this.frames = canvasOrFrames;
-        }
+    constructor(frames: AnimationFrame[]) {
+        this.frames = frames;
         let collectiveDuration: number = 0;
         this.frames.forEach(frame => collectiveDuration += frame.duration);
         this.animationDuration = collectiveDuration;
@@ -50,7 +31,6 @@ export class Animation {
      */
     public getFrameAtTime(seconds: number): AnimationFrame {
         const timeSinceFirstFrame: number = seconds % this.animationDuration;
-
         let elapsed: number = 0;
         for (let i = 0; i < this.frames.length; i++) {
             const currentFrame: AnimationFrame = this.frames[i];
@@ -85,7 +65,7 @@ export class Animation {
      * @param canvases The ordered canvases for the frames to create.
      * @param frameDuration The duration of each frame.
      */
-    public static createAnimation(canvases: HTMLCanvasElement[], frameDuration: number): Animation {
+    public static create(canvases: HTMLCanvasElement[], frameDuration: number = 1.0): Animation {
         const frames: AnimationFrame[] = [];
         canvases.forEach(canvas => {
             frames.push({
