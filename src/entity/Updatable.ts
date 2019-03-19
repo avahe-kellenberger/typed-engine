@@ -1,6 +1,6 @@
 export interface Updatable {
     /**
-     * @param deltaTime The time since the game's last update.
+     * @param deltaTime The time in seconds since the game's last update.
      */
     update(deltaTime: number): void;
 }
