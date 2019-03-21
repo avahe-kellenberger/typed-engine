@@ -2,9 +2,9 @@ import { Animation } from '../../../src/animation/Animation';
 import { Animator } from '../../../src/animation/Animator';
 
 const canvas: HTMLCanvasElement = document.createElement('canvas');
-const anim1: Animation = new Animation(canvas);
-const anim2: Animation = new Animation(canvas);
-const anim3: Animation = new Animation(canvas);
+const anim1: Animation = Animation.create([canvas]);
+const anim2: Animation = Animation.create([canvas]);
+const anim3: Animation = Animation.create([canvas]);
 
 const animator: Animator = new Animator();
 
