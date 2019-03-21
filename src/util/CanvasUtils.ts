@@ -48,6 +48,7 @@ export class CanvasUtils {
      * @param canvas The canvas to split.
      * @param columns The number of columns to split into.
      * @param rows The number of rows to split into.
+     * @return The equal parts of the split-up canvas. 
      */
     public static split(canvas: HTMLCanvasElement, columns: number, rows: number): HTMLCanvasElement[] {
         const canvases: HTMLCanvasElement[] = [];

@@ -6,43 +6,26 @@ import { GameObject } from './GameObject';
 /**
  * An animated object.
  */
-export class AnimatedSprite extends GameObject {
+export class AnimatedSprite<AnimationID extends string> extends GameObject {
 
     private readonly animator: Animator;
 
     /**
-     * @param animationID The ID of the animation.
-     * @param animation The animation to use.
-     */
-    constructor(animationID: string, animation: Animation);
-
-    /**
-     * 
      * @param animations The animations of the sprite paired with their respective IDs.
      */
-    constructor(animations: [string, Animation][]);
-
-    /**
-     * Overload Constructor.
-     */
-    constructor(animationsOrAnimationID: string|[string, Animation][], animation?: Animation) {
+    constructor(animSets: ReadonlyArray<[AnimationID, Animation]>) {
         super();
         this.animator = new Animator();
-        if (animationsOrAnimationID instanceof Array) {
-            animationsOrAnimationID.forEach(entry => this.animator.setAnimation(entry[0], entry[1]));
-        } else if (animation !== undefined) {
-            this.animator.setAnimation(animationsOrAnimationID, animation);
-        } else {
-            throw new Error(`animation must be defined.`);
-        }
-        
+        animSets.forEach(animSet => {
+            this.animator.setAnimation(animSet[0], animSet[1]);
+        });
     }
 
     /**
      * Sets the animation's ID.
      * @param id The ID of the animation.
      */
-    public setCurrentAnimation(id: string): void {
+    public setCurrentAnimation(id: AnimationID): void {
         this.animator.setCurrentAnimation(id);
     }
 
