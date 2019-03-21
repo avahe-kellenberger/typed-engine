@@ -1,0 +1,24 @@
+html, body {
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+}
+
+#canvas {
+    outline: none;
+}
+
+.full-screen {
+    position: absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+}
