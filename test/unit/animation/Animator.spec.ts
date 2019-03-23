@@ -1,26 +1,25 @@
 import { Animation } from '../../../src/animation/Animation';
 import { Animator } from '../../../src/animation/Animator';
 
+type AnimationID = 'one' | 'two' | 'three';
+
 const canvas: HTMLCanvasElement = document.createElement('canvas');
 const anim1: Animation = Animation.create([canvas]);
 const anim2: Animation = Animation.create([canvas]);
 const anim3: Animation = Animation.create([canvas]);
 
-const animator: Animator = new Animator();
+const animationIDMap: Map<AnimationID, Animation> = new Map();
+animationIDMap.set('one', anim1);
+animationIDMap.set('two', anim2);
+animationIDMap.set('three', anim3);
+
+const animator: Animator<AnimationID> = new Animator(animationIDMap);
 
 describe(`getAnimation`, () => {
-    animator.setAnimation('one', anim1);
-    animator.setAnimation('two', anim2);
-    animator.setAnimation('three', anim3);
-    
-    it(`Existing animation with id is properly returned`, () => {
-        expect(animator.getAnimation('one')).toBe(anim1);
-        expect(animator.getAnimation('two')).toBe(anim2);
-        expect(animator.getAnimation('three')).toBe(anim3);
-    });
-
-    it(`Incorrect animation id returns undefined`, () => {
-        expect(animator.getAnimation('four')).toEqual(undefined);
+    it(`Animation mapped to given ID is properly returned`, () => {
+        animationIDMap.forEach((anim, id) => {
+            expect(animator.getAnimation(id)).toBe(anim);
+        });
     });
 });
 
@@ -28,21 +27,11 @@ describe(`getCurrentAnimation`, () => {
     it(`Returns the first animation that was set`, () => {
         expect(animator.getCurrentAnimation()).toBe(anim1);
     });
-
-    it(`Returns undefined when created without added animations`, () => {
-        const emptyAnimator: Animator = new Animator();
-        expect(emptyAnimator.getCurrentAnimation()).toEqual(undefined);
-    });
 });
 
 describe(`setCurrentAnimation`, () => {
-    it(`Error when given unknown animation ID`, () => {
-        expect(() => animator.setCurrentAnimation(`four`)).toThrow();
-    });
-
     it(`Sets the current animation when given a proper ID`, () => {
-        const currentID: string = `two`;
-        animator.setCurrentAnimation(currentID);
+        animator.setCurrentAnimation('two');
         expect(animator.getCurrentAnimation()).toBe(anim2);
     })
 });

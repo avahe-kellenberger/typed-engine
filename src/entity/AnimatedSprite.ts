@@ -8,17 +8,14 @@ import { GameObject } from './GameObject';
  */
 export class AnimatedSprite<AnimationID extends string> extends GameObject {
 
-    private readonly animator: Animator;
+    private readonly animator: Animator<AnimationID>;
 
     /**
-     * @param animations The animations of the sprite paired with their respective IDs.
+     * @param animationIDMap The animations of the sprite mapped to their respective IDs.
      */
-    constructor(animSets: ReadonlyArray<[AnimationID, Animation]>) {
+    constructor(animationIDMap: ReadonlyMap<AnimationID, Animation>) {
         super();
-        this.animator = new Animator();
-        animSets.forEach(animSet => {
-            this.animator.setAnimation(animSet[0], animSet[1]);
-        });
+        this.animator = new Animator(animationIDMap);
     }
 
     /**

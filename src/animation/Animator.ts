@@ -1,14 +1,20 @@
 import { Updatable } from '../entity/Updatable';
 import { Animation, AnimationFrame } from './Animation';
 
-export class Animator implements Updatable {
+export class Animator<AnimationID extends string> implements Updatable {
 
-    private readonly animationMap: Map<string, Animation>;
-    private currentAnimation: Animation|undefined;
+    private readonly animationIDMap: ReadonlyMap<AnimationID, Animation>;
+    private currentAnimation: Animation;
     private elapsedSeconds: number;
 
-    constructor() {
-        this.animationMap = new Map();
+    /**
+     * @param animationIDMap The animations of the sprite mapped to their respective IDs.
+     * The first animation in the map will be assigned as the current animation.
+     * @see Animator.getCurrentAnimation
+     */
+    constructor(animationIDMap: ReadonlyMap<AnimationID, Animation>) {
+        this.animationIDMap = animationIDMap;
+        this.currentAnimation = animationIDMap.values().next().value;
         this.elapsedSeconds = 0;
     }
 
@@ -24,8 +30,8 @@ export class Animator implements Updatable {
      * @param id The animation's ID.
      * @return If the animation wasn't already playing.
      */
-    public setCurrentAnimation(id: string): boolean {
-        const anim: Animation|undefined = this.animationMap.get(id);
+    public setCurrentAnimation(id: AnimationID): boolean {
+        const anim: Animation|undefined = this.animationIDMap.get(id);
         if (anim === undefined) {
             throw new Error(`Unknown animation id \"${id}\"`);
         }
@@ -53,30 +59,16 @@ export class Animator implements Updatable {
      * @param id The animation's ID.
      * @return The animation associated with the given ID.
      */
-    public getAnimation(id: string): Animation|undefined {
-        return this.animationMap.get(id);
+    public getAnimation(id: AnimationID): Animation|undefined {
+        return this.animationIDMap.get(id);
     }
 
     /**
      * @param id The animation's ID.
      * @return If the animator contains an animation associated with the given ID.
      */
-    public hasAnimation(id: string): boolean {
-        return this.animationMap.has(id);
-    }
-
-    /**
-     * Assigns the ID to the given animation.
-     * If this is the only animation, it will automatically be set as the current animation.
-     * @see Animator.setCurrentAnimation
-     * @param id The ID of the animation.
-     * @param animation The animation to set.
-     */
-    public setAnimation(id: string, animation: Animation): void {
-        this.animationMap.set(id, animation);
-        if (this.animationMap.size === 1) {
-            this.currentAnimation = animation;
-        }
+    public hasAnimation(id: AnimationID): boolean {
+        return this.animationIDMap.has(id);
     }
 
     // #endregion

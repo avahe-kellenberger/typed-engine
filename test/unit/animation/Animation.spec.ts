@@ -2,12 +2,13 @@ import { Animation, AnimationFrame } from '../../../src/animation/Animation';
 
 describe(`getFrameAtTime`, () => {
     const blankCanvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+    
     it(`Any time for a single-frame animation should return that frame`, () => {
-        const canvas: HTMLCanvasElement = blankCanvas;
-        const testAnimation: Animation = Animation.create([canvas, canvas]);
-        const onlyFrame: AnimationFrame = testAnimation.getFrameAtIndex(0);
+        const testAnimation: Animation = Animation.create([blankCanvas]);
+        const firstFrame: AnimationFrame = testAnimation.getFrameAtIndex(0);
         const randomTime: number = Math.random() * 10;
-        expect(testAnimation.getFrameAtTime(randomTime)).toBe(onlyFrame);
+        const frameAtTime: AnimationFrame = testAnimation.getFrameAtTime(randomTime);
+        expect(frameAtTime).toBe(firstFrame);
     });
 
     it(`Time given multiple frames in should return the correct frame`, () => {
