@@ -17,6 +17,7 @@
         "webpack-dev-server": "^3.2.1"
     },
     "scripts": {
+        "test": "jest test/",
         "example-launch": "concurrently --kill-others 'webpack --context ./example --config ./example/webpack.config.js --mode development --watch' '$BROWSER ./example/src/index.html'"
     }
 }

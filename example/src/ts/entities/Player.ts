@@ -3,6 +3,7 @@ import { AnimatedSprite } from '../../../../src/entity/AnimatedSprite';
 import { CanvasUtils } from '../../../../src/util/CanvasUtils';
 import { Assets } from '../asset/Assets';
 
+// Define the animation IDs.
 type AnimationID = 'idle' | 'walking' | 'jumping';
 
 /**
