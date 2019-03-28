@@ -9,7 +9,7 @@ export class MyLayer extends Layer {
     constructor() {
         super();
         this.player = new Player();
-        this.player.setLocation(new Vector2D(300, 200));
+        this.player.setLocation(300, 200);
         this.addObject(this.player);
     }
 

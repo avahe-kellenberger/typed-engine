@@ -33,16 +33,35 @@ export class Entity implements Locatable {
     }
 
     /**
+     * Sets the object's location.
+     * @param x The x location.
+     * @param y The y location.
+     */
+    public setLocation(x: number, y: number): void;
+    
+    /**
      * @override
      */
-    public setLocation(location: Vector2D): void {
-        if (this.location.equals(location)) {
-            return;
-        }
-        const delta: Vector2D = location.subtract(this.location);
-        this.location = location;
-        if (this.locationListeners !== undefined) {
-            this.locationListeners.forEach(listener => listener(this.location, delta));
+    public setLocation(location: Vector2D): void;
+
+    /**
+     * Overload function.
+     */
+    public setLocation(locationOrX: Vector2D|number, y?: number): void {
+        if (!(locationOrX instanceof Vector2D)) {
+            if (y === undefined) {
+                throw new Error('');
+            } 
+            this.setLocation(new Vector2D(locationOrX, y));
+        } else {
+            if (locationOrX.equals(this.location)) {
+                return;
+            }
+            const delta: Vector2D = locationOrX.subtract(this.location);
+            this.location = locationOrX;
+            if (this.locationListeners !== undefined) {
+                this.locationListeners.forEach(listener => listener(this.location, delta));
+            }
         }
     }
 
