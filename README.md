@@ -1,5 +1,7 @@
 # typed-engine
 
+[![Build Status](https://travis-ci.org/avahe-kellenberger/typed-engine.svg?branch=master)](https://travis-ci.org/avahe-kellenberger/typed-engine)
+
 2D Game Engine in TypeScript
 
 **NOTE:** **_This package is currently in development - expected first usable release in April_**
