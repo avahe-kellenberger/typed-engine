@@ -5,11 +5,41 @@ export interface EventHandler {
     /**
      * The event type.
      */
-    readonly type: keyof GlobalEventHandlersEventMap;
+    readonly types: (keyof GlobalEventHandlersEventMap)[];
     /**
      * The function which handles the event.
      */
     readonly listener: EventListener;
+}
+
+/**
+ * EventHandler for 'keyup' and 'keydown' events.
+ */
+export class KeyEventHandler implements EventHandler {
+    
+    public readonly types: (keyof GlobalEventHandlersEventMap)[] = ['keyup', 'keydown'];
+    public readonly listener: EventListener;
+    private lastEventUp: boolean|undefined;
+
+    /**
+     * @param listener The listener to invoke.
+     * @param stateChangesOnly If the listener should only be invoked if the state of the key changes,
+     * e.g. keydown to keyup, or keyup to keydown.
+     */
+    constructor(listener: EventListener, stateChangesOnly: boolean = true) {
+        if (stateChangesOnly) {
+            this.listener = (event) => listener(event);
+        } else {
+            this.listener = (event) => {
+                const isEventKeyup: boolean = event.type === 'keyup';
+                if (this.lastEventUp === undefined || this.lastEventUp !== isEventKeyup) { 
+                    this.lastEventUp = isEventKeyup;
+                    listener(event);
+                }
+            };
+        }
+    }
+
 }
 
 /**
@@ -36,7 +66,9 @@ export class InputHandler {
      */
     public addEventHandler(handler: EventHandler): boolean {
         if (this.inputHandlers.size !== this.inputHandlers.add(handler).size) {
-            this.document.addEventListener(handler.type, handler.listener);
+            handler.types.forEach(type => {
+                this.document.addEventListener(type, handler.listener);
+            });
             return true;
         }
         return false;
@@ -49,7 +81,9 @@ export class InputHandler {
      */
     public removeEventHandler(handler: EventHandler): boolean {
         if (this.inputHandlers.delete(handler)) {
-            this.document.removeEventListener(handler.type, handler.listener);
+            handler.types.forEach(type => {
+                this.document.removeEventListener(type, handler.listener);
+            });
             return true;
         }
         return false;
@@ -60,7 +94,9 @@ export class InputHandler {
      */
     public clearEventHandlers(): void {
         this.inputHandlers.forEach(handler => {
-            this.document.removeEventListener(handler.type, handler.listener);
+            handler.types.forEach(type => {
+                this.document.removeEventListener(type, handler.listener);
+            });
         });
     }
 
