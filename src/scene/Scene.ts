@@ -1,18 +1,34 @@
 import { Renderable, RenderableCallback } from '../entity/Renderable';
 import { Updatable } from '../entity/Updatable';
+import { Game } from '../Game';
+import { InputHandler } from '../input/InputHandler';
 import { Camera } from './Camera';
 import { Layer } from './Layer';
 
+/**
+ * Manages Layers and scene-specific input via the `inputHandler`.
+ * Each scene owns its own `inputHandler`.
+ * For global input management, see `Game.inputHandler`.
+ */
 export class Scene implements Updatable, Renderable {
 
     private readonly layers: Layer[];
     private readonly layersSet: Set<Layer>;
     private layerOrderIsValid: boolean;
 
-    constructor() {
+    public readonly inputHandler: InputHandler;
+
+    /**
+     * @param game The game which owns the scene.
+     */
+    constructor(game: Game) {
+        this.inputHandler = new InputHandler(document);
         this.layers = [];
         this.layersSet = new Set();
         this.layerOrderIsValid = true;
+
+        // Ensure all EventHandlers specific to this scene are removed.
+        game.addContentListener(() => this.inputHandler.clearEventHandlers());
     }
 
     /**

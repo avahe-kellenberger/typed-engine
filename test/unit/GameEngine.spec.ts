@@ -1,11 +1,14 @@
-import { GameEngine } from '../../src/GameEngine';
-import { HeadlessGame } from '../../src/HeadlessGame';
+import { GameEngine } from "../../src/GameEngine";
 
-const engine: GameEngine = new GameEngine(new HeadlessGame());
+const engine: GameEngine = new GameEngine({
+    update(deltaTime: number): void {
+        // Empty
+    }
+});
 
 test(`start and stop function as intended`, () => {
     expect(engine.isRunning()).toBeFalsy();
-    
+
     engine.start();
     expect(engine.isRunning()).toBeTruthy();
 

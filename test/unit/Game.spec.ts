@@ -1,7 +1,10 @@
-import { HeadlessGame } from '../../src/HeadlessGame';
+import 'jest-canvas-mock';
+
+import { Game } from '../../src/Game';
 import { Layer } from '../../src/scene/Layer';
 
-const game: HeadlessGame = new HeadlessGame();
+const canvas: HTMLCanvasElement = document.createElement('canvas');
+const game: Game = new Game(canvas.getContext('2d')!);
 
 test(`getContent returns the object given in setContent`, () => {
     const layerA: Layer = new Layer();
