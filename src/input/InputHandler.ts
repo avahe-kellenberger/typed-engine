@@ -3,43 +3,13 @@
  */
 export interface EventHandler {
     /**
-     * The event type.
+     * The event type(s).
      */
-    readonly types: (keyof GlobalEventHandlersEventMap)[];
+    readonly types: ReadonlyArray<keyof GlobalEventHandlersEventMap>;
     /**
      * The function which handles the event.
      */
     readonly listener: EventListener;
-}
-
-/**
- * EventHandler for 'keyup' and 'keydown' events.
- */
-export class KeyEventHandler implements EventHandler {
-    
-    public readonly types: (keyof GlobalEventHandlersEventMap)[] = ['keyup', 'keydown'];
-    public readonly listener: EventListener;
-    private lastEventUp: boolean|undefined;
-
-    /**
-     * @param listener The listener to invoke.
-     * @param stateChangesOnly If the listener should only be invoked if the state of the key changes,
-     * e.g. keydown to keyup, or keyup to keydown.
-     */
-    constructor(listener: EventListener, stateChangesOnly: boolean = true) {
-        if (stateChangesOnly) {
-            this.listener = (event) => listener(event);
-        } else {
-            this.listener = (event) => {
-                const isEventKeyup: boolean = event.type === 'keyup';
-                if (this.lastEventUp === undefined || this.lastEventUp !== isEventKeyup) { 
-                    this.lastEventUp = isEventKeyup;
-                    listener(event);
-                }
-            };
-        }
-    }
-
 }
 
 /**
@@ -48,7 +18,7 @@ export class KeyEventHandler implements EventHandler {
 export class InputHandler {
 
     private readonly document: Document;
-    private readonly inputHandlers: Set<EventHandler>;
+    private readonly eventHandlers: Set<EventHandler>;
 
     /**
      * Attaches the handler to the given document.
@@ -56,7 +26,7 @@ export class InputHandler {
      */
     constructor(document: HTMLDocument) {
         this.document = document;
-        this.inputHandlers = new Set();
+        this.eventHandlers = new Set();
     }
 
     /**
@@ -65,13 +35,13 @@ export class InputHandler {
      * @return If the event handler had not already been added.
      */
     public addEventHandler(handler: EventHandler): boolean {
-        if (this.inputHandlers.size !== this.inputHandlers.add(handler).size) {
-            handler.types.forEach(type => {
-                this.document.addEventListener(type, handler.listener);
-            });
-            return true;
+        if (this.eventHandlers.size === this.eventHandlers.add(handler).size) {
+            return false;
         }
-        return false;
+        handler.types.forEach(type => {
+            this.document.addEventListener(type, handler.listener);
+        });
+        return true;
     }
 
     /**
@@ -80,20 +50,20 @@ export class InputHandler {
      * @return If the event handler had already been added. 
      */
     public removeEventHandler(handler: EventHandler): boolean {
-        if (this.inputHandlers.delete(handler)) {
-            handler.types.forEach(type => {
-                this.document.removeEventListener(type, handler.listener);
-            });
-            return true;
+        if (!this.eventHandlers.delete(handler)) {
+            return false;
         }
-        return false;
+        handler.types.forEach(type => {
+            this.document.removeEventListener(type, handler.listener);
+        });
+        return true;
     }
 
     /**
      * Removes all event handlers.
      */
     public clearEventHandlers(): void {
-        this.inputHandlers.forEach(handler => {
+        this.eventHandlers.forEach(handler => {
             handler.types.forEach(type => {
                 this.document.removeEventListener(type, handler.listener);
             });
