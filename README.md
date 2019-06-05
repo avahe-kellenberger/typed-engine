@@ -4,7 +4,7 @@
 
 2D Game Engine in TypeScript
 
-**NOTE:** **_This package is currently in development - expected first usable release in April_**
+**NOTE:** **_Project is currently on hold until further notice_**
 
 # Game Structure
 
