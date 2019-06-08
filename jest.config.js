@@ -11,7 +11,7 @@ module.exports = {
 
     // A map from regular expressions to paths to transformers
     transform: {
-        '\\.(ts|tsx)$': '<rootDir>/node_modules/ts-jest/preprocessor.js'
+        '\\.(ts|tsx)$': 'ts-jest'
     },
 
     testEnvironment: 'jsdom',
