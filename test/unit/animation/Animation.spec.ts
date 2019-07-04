@@ -20,7 +20,9 @@ describe(`getFrameAtTime`, () => {
 
       const interpolationRatio: number = 0.5
       const interpolationTime = frameDuration * interpolationRatio
-      const interpolatedFrame: AnimationFrame = animation.getFrameAtTime(interpolationTime)
+      const interpolatedFrame: AnimationFrame = animation.getInterpolatedFrameAtTime(
+        interpolationTime
+      )
       const expectedInterpolatedLocation: Vector2D = startLocation
         .add(endLocation)
         .scale(interpolationRatio)
