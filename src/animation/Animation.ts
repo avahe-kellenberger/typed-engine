@@ -1,5 +1,4 @@
 import { AnimationFrame } from './AnimationFrame'
-import { Vector2D } from '../math/Vector2D'
 
 export interface FrameData {
   index: number
@@ -33,22 +32,16 @@ export class Animation {
    * @return TODO:
    */
   public getInterpolatedFrameAtTime(seconds: number): AnimationFrame {
-    const startFrameData = this.getFrameDataAtTime(seconds)
-    // TODO: Can break if last frame - but last frame should be ending (no duration).
-    const endFrameData = this.frameData[startFrameData.index + 1]
+    const currentFrameData = this.getFrameDataAtTime(seconds)
+    const currentFrame = currentFrameData.frame
+    // If this is the last frame, no interpolation can be done.
+    if (currentFrameData.index + 1 === this.frameData.length) {
+      return currentFrame
+    }
 
-    const startFrame = startFrameData.frame
-    const endFrame = endFrameData.frame
-
-    const timeSinceStartFrame: number = seconds - startFrameData.startTime
-    const interpolationRatio: number = timeSinceStartFrame / startFrame.duration
-
-    // Interpolate number data types.
-    const interpolatedLocation: Vector2D = endFrame.location
-      .add(startFrame.location)
-      .scale(interpolationRatio)
-
-    return new AnimationFrame(interpolatedLocation, startFrame.duration - timeSinceStartFrame)
+    const nextFrame = this.frameData[currentFrameData.index + 1].frame
+    const timeSinceStartFrame: number = seconds - currentFrameData.startTime
+    return currentFrame.interpolateTo(nextFrame, timeSinceStartFrame)
   }
 
   private getFrameDataAtTime(seconds: number): FrameData {

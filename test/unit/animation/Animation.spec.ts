@@ -18,14 +18,15 @@ describe(`getFrameAtTime`, () => {
 
       const animation: Animation = new Animation([frame1, frame2])
 
-      const interpolationRatio: number = 0.5
+      const interpolationRatio: number = 0.4
       const interpolationTime = frameDuration * interpolationRatio
       const interpolatedFrame: AnimationFrame = animation.getInterpolatedFrameAtTime(
         interpolationTime
       )
-      const expectedInterpolatedLocation: Vector2D = startLocation
-        .add(endLocation)
-        .scale(interpolationRatio)
+      const distance: Vector2D = endLocation.subtract(startLocation)
+      const expectedInterpolatedLocation: Vector2D = startLocation.add(
+        distance.scale(interpolationRatio)
+      )
       expect(interpolatedFrame.location).toEqual(expectedInterpolatedLocation)
     })
   })
