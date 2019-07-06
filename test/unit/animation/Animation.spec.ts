@@ -19,32 +19,18 @@ describe(`getFrameAtTime`, () => {
     const animation: Animation = new Animation(frames)
 
     it(`Finds the correct preceeding frame based on time`, () => {
+      let index: number = 0
       let currentTime: number = 0
-      let index: number = animation.getFrameDataPreceedingTime(currentTime).index
-      expect(index).toEqual(0)
+      for (let i = 0; i < frames.length; i++) {
+        index = animation.getFrameDataPreceedingTime(currentTime).index
+        expect(index).toEqual(i)
+        currentTime += frames[i].duration - 0.1
+        expect(index).toEqual(i)
+        currentTime += 0.1
+      }
 
-      currentTime += frames[0].duration - 0.1
-      index = animation.getFrameDataPreceedingTime(currentTime).index
-      expect(index).toEqual(0)
-
-      currentTime += 0.1
-      index = animation.getFrameDataPreceedingTime(currentTime).index
-      expect(index).toEqual(1)
-
-      currentTime += frames[1].duration - 0.1
-      index = animation.getFrameDataPreceedingTime(currentTime).index
-      expect(index).toEqual(1)
-
-      currentTime += 0.1
-      index = animation.getFrameDataPreceedingTime(currentTime).index
-      expect(index).toEqual(2)
-
-      currentTime += frames[2].duration - 0.1
-      index = animation.getFrameDataPreceedingTime(currentTime).index
-      expect(index).toEqual(2)
-
-      // Time greater than total duration should wrap to the beginning of the animation.
-      currentTime += frames[0].duration
+      // Special case where time exceeds the duration, and wraps around to the first frame.
+      currentTime = animation.duration
       index = animation.getFrameDataPreceedingTime(currentTime).index
       expect(index).toEqual(0)
     })
