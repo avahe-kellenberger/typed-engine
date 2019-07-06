@@ -1,5 +1,8 @@
 import { AnimationFrame } from './AnimationFrame'
 
+/**
+ * The AnimationFrame and relative metadata.
+ */
 export interface FrameData {
   index: number
   frame: AnimationFrame
@@ -11,8 +14,8 @@ export interface FrameData {
  * This allows for higher flexibility when dealing with image data.
  */
 export class Animation {
-  // AnimationFrame, startTime
   private readonly frameData: FrameData[]
+  public readonly duration: number
 
   /**
    * @param frames The frames of the animation to be displayed.
@@ -25,6 +28,7 @@ export class Animation {
       this.frameData[index] = { index, frame, startTime }
       startTime += frame.duration
     })
+    this.duration = startTime
   }
 
   /**
@@ -34,25 +38,17 @@ export class Animation {
   public getInterpolatedFrameAtTime(seconds: number): AnimationFrame {
     const currentFrameData = this.getFrameDataPreceedingTime(seconds)
     const currentFrame = currentFrameData.frame
-    // If this is the last frame, no interpolation can be done.
-    // TODO: Change when implementing frame wrapping (details in test suite).
-    if (currentFrameData.index + 1 === this.frameData.length) {
-      return currentFrame
-    }
 
-    const nextFrame = this.frameData[currentFrameData.index + 1].frame
+    // Get the next frame in the animation, which can wrap from the last frame to the first.
+    const nextFrame = (currentFrameData.index + 1 == this.frameData.length ? this.frameData[0] : this.frameData[currentFrameData.index + 1]).frame
     const timeSinceFrameStart: number = seconds - currentFrameData.startTime
     return AnimationFrame.interpolateTo(currentFrame, nextFrame, timeSinceFrameStart)
   }
 
   public getFrameDataPreceedingTime(seconds: number): FrameData {
-    const data: FrameData | undefined = this.frameData.find(data => {
+    seconds %= this.duration
+    return this.frameData.find(data => {
       return data.startTime <= seconds && data.startTime + data.frame.duration > seconds
-    })
-    if (data === undefined) {
-      // TODO: Change when implementing frame wrapping (details in test suite).
-      throw new Error("Given time does not lie within the animation's duration.")
-    }
-    return data
+    })!
   }
 }

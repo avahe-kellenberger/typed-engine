@@ -19,43 +19,62 @@ describe(`getFrameAtTime`, () => {
     const animation: Animation = new Animation(frames)
 
     it(`Finds the correct preceeding frame based on time`, () => {
-      let index: number = animation.getFrameDataPreceedingTime(0).index
+      let currentTime: number = 0
+      let index: number = animation.getFrameDataPreceedingTime(currentTime).index
       expect(index).toEqual(0)
 
-      index = animation.getFrameDataPreceedingTime(frames[0].duration - 0.1).index
+      currentTime += frames[0].duration - 0.1
+      index = animation.getFrameDataPreceedingTime(currentTime).index
       expect(index).toEqual(0)
 
-      index = animation.getFrameDataPreceedingTime(frames[0].duration).index
+      currentTime += 0.1
+      index = animation.getFrameDataPreceedingTime(currentTime).index
       expect(index).toEqual(1)
 
-      index = animation.getFrameDataPreceedingTime(frames[0].duration + frames[1].duration - 0.1).index
+      currentTime += frames[1].duration - 0.1
+      index = animation.getFrameDataPreceedingTime(currentTime).index
       expect(index).toEqual(1)
 
-      index = animation.getFrameDataPreceedingTime(frames[0].duration + frames[1].duration).index
+      currentTime += 0.1
+      index = animation.getFrameDataPreceedingTime(currentTime).index
       expect(index).toEqual(2)
 
-      // TODO: Add cases for wrapping (last frame of animation wrapping to first frame of animation).
+      currentTime += frames[2].duration - 0.1
+      index = animation.getFrameDataPreceedingTime(currentTime).index
+      expect(index).toEqual(2)
+
+      // Time greater than total duration should wrap to the beginning of the animation.
+      currentTime += frames[0].duration
+      index = animation.getFrameDataPreceedingTime(currentTime).index
+      expect(index).toEqual(0)
     })
 
-    it(`Correctly interpolates frame properties between multiple frames`, () => {
-      const interpolationTime = frames[0].duration + frames[1].duration / 2
+    function testFrameInterpolationAtTime(interpolationTime: number) {
       const interpolatedFrame: AnimationFrame = animation.getInterpolatedFrameAtTime(interpolationTime)
 
       const firstFrameData: FrameData = animation.getFrameDataPreceedingTime(interpolationTime)
       const firstFrameDuration: number = firstFrameData.frame.duration
       const firstFrameLoc: Vector2D = firstFrameData.frame.location
 
-      // TODO: Will need to change this line for frame wrapping.
-      const lastFrame: AnimationFrame = frames[firstFrameData.index + 1]
+      const lastFrame: AnimationFrame = firstFrameData.index == frames.length - 1 ? frames[0] : frames[firstFrameData.index + 1]
       const lastFrameLoc: Vector2D = lastFrame.location
       const distance: Vector2D = lastFrameLoc.subtract(firstFrameLoc)
 
       const interpolationRatio: number = (interpolationTime - firstFrameData.startTime) / firstFrameDuration
       const expectedInterpolatedLocation: Vector2D = firstFrameLoc.add(distance.scale(interpolationRatio))
-      expect(interpolatedFrame.location).toEqual(expectedInterpolatedLocation)
-
       const interpolatedTime: number = firstFrameDuration - firstFrameDuration * interpolationRatio
-      expect(interpolatedTime).toEqual(interpolatedFrame.duration)
+      const expectedFrame: AnimationFrame = new AnimationFrame(expectedInterpolatedLocation, interpolatedTime)
+      expect(interpolatedFrame).toEqual(expectedFrame)
+    }
+
+    it(`Correctly interpolates frame properties between multiple frames`, () => {
+      const interpolationTime = frames[0].duration + frames[1].duration / 2
+      testFrameInterpolationAtTime(interpolationTime)
+    })
+
+    it(`Correctly interpolates frame properties between the last and first frames`, () => {
+      const interpolationTime = frames[0].duration + frames[1].duration + frames[2].duration / 2
+      testFrameInterpolationAtTime(interpolationTime)
     })
   })
 })
