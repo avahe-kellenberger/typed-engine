@@ -29,27 +29,30 @@ export class Animation {
 
   /**
    * @param seconds The number of seconds elapsed since the animation began.
-   * @return TODO:
+   * @return A frame interpolated between the two frames which lie on either side of the given time.
    */
   public getInterpolatedFrameAtTime(seconds: number): AnimationFrame {
-    const currentFrameData = this.getFrameDataAtTime(seconds)
+    const currentFrameData = this.getFrameDataPreceedingTime(seconds)
     const currentFrame = currentFrameData.frame
     // If this is the last frame, no interpolation can be done.
+    // TODO: Change when implementing frame wrapping (details in test suite).
     if (currentFrameData.index + 1 === this.frameData.length) {
       return currentFrame
     }
 
     const nextFrame = this.frameData[currentFrameData.index + 1].frame
-    const timeSinceStartFrame: number = seconds - currentFrameData.startTime
-    return currentFrame.interpolateTo(nextFrame, timeSinceStartFrame)
+    const timeSinceFrameStart: number = seconds - currentFrameData.startTime
+    return AnimationFrame.interpolateTo(currentFrame, nextFrame, timeSinceFrameStart)
   }
 
-  private getFrameDataAtTime(seconds: number): FrameData {
-    for (let i = 0; i < this.frameData.length; i++) {
-      if (seconds >= this.frameData[i].startTime) {
-        return this.frameData[i]
-      }
+  public getFrameDataPreceedingTime(seconds: number): FrameData {
+    const data: FrameData | undefined = this.frameData.find(data => {
+      return data.startTime <= seconds && data.startTime + data.frame.duration > seconds
+    })
+    if (data === undefined) {
+      // TODO: Change when implementing frame wrapping (details in test suite).
+      throw new Error("Given time does not lie within the animation's duration.")
     }
-    throw new Error("Given time does not lie within the animation's duration.")
+    return data
   }
 }
