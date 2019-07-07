@@ -42,7 +42,7 @@ export class Animation {
     // Get the next frame in the animation, which can wrap from the last frame to the first.
     const nextFrame = (currentFrameData.index + 1 == this.frameData.length ? this.frameData[0] : this.frameData[currentFrameData.index + 1]).frame
     const timeSinceFrameStart: number = seconds - currentFrameData.startTime
-    return AnimationFrame.interpolateTo(currentFrame, nextFrame, timeSinceFrameStart)
+    return currentFrame.interpolateTo(nextFrame, timeSinceFrameStart)
   }
 
   public getFrameDataPreceedingTime(seconds: number): FrameData {

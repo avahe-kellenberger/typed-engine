@@ -9,14 +9,10 @@ export class AnimationFrame {
     this.duration = duration
   }
 
-  public static interpolateTo(
-    startFrame: AnimationFrame,
-    endFrame: AnimationFrame,
-    timeSinceFrameStart: number
-  ): AnimationFrame {
-    const interpolationRatio: number = timeSinceFrameStart / startFrame.duration
-    const distance: Vector2D = endFrame.location.subtract(startFrame.location)
-    const interpolatedLocation: Vector2D = startFrame.location.add(distance.scale(interpolationRatio))
-    return new AnimationFrame(interpolatedLocation, startFrame.duration - timeSinceFrameStart)
+  public interpolateTo(frame: AnimationFrame, timeSinceFrameStart: number): AnimationFrame {
+    const interpolationRatio: number = timeSinceFrameStart / this.duration
+    const distance: Vector2D = frame.location.subtract(this.location)
+    const interpolatedLocation: Vector2D = this.location.add(distance.scale(interpolationRatio))
+    return new AnimationFrame(interpolatedLocation, this.duration - timeSinceFrameStart)
   }
 }
