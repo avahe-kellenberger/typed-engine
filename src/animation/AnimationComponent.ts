@@ -10,10 +10,10 @@ export interface FrameData {
 }
 
 /**
- * Animations use HTMLCanvasElements to render loaded images.
- * This allows for higher flexibility when dealing with image data.
+ * An AnimationComponent is a piece of an Animation,
+ * such as an animated leg on an animated character.
  */
-export class Animation {
+export class AnimationComponent {
   private readonly frameData: FrameData[]
   public readonly duration: number
 
@@ -40,13 +40,20 @@ export class Animation {
     const currentFrame = currentFrameData.frame
 
     // Get the next frame in the animation, which can wrap from the last frame to the first.
-    const nextFrame = (currentFrameData.index + 1 == this.frameData.length ? this.frameData[0] : this.frameData[currentFrameData.index + 1]).frame
+    const nextFrame = this.getNextFrameData(currentFrameData.index).frame
     const timeSinceFrameStart: number = seconds - currentFrameData.startTime
     return currentFrame.interpolateTo(nextFrame, timeSinceFrameStart)
   }
 
+  private getNextFrameData(index: number): FrameData {
+    return index == this.frameData.length - 1 ? this.frameData[0] : this.frameData[index + 1]
+  }
+
   public getFrameDataPreceedingTime(seconds: number): FrameData {
+    // Wrap the time around to the beginning of the animation.
     seconds %= this.duration
+    // `find` could return undefined, but we ensure it doesn't by wrapping the time.
+    // This is the reason for the exclamation mark (this is thoroughly tested).
     return this.frameData.find(data => {
       return data.startTime <= seconds && data.startTime + data.frame.duration > seconds
     })!
