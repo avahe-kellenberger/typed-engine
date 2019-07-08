@@ -1,6 +1,6 @@
 import { Vector2D } from '../../../src/math/Vector2D'
 import { AnimationFrame } from '../../../src/animation/AnimationFrame'
-import { AnimationComponent, FrameData } from '../../../src/animation/AnimationComponent'
+import { AnimationComponent } from '../../../src/animation/AnimationComponent'
 
 describe(`AnimationComponent`, () => {
   describe(`getFrameAtTime`, () => {
@@ -17,13 +17,13 @@ describe(`AnimationComponent`, () => {
       let animationDuration: number = 0
       frames.forEach(frame => (animationDuration += frame.duration))
 
-      const animation: AnimationComponent = new AnimationComponent(frames)
+      const animationComponent: AnimationComponent = new AnimationComponent(frames)
 
       it(`Finds the correct preceeding frame based on time`, () => {
         let index: number = 0
         let currentTime: number = 0
         for (let i = 0; i < frames.length; i++) {
-          index = animation.getFrameDataPreceedingTime(currentTime).index
+          index = animationComponent.getFrameIndexPreceedingTime(currentTime)
           expect(index).toEqual(i)
           currentTime += frames[i].duration - 0.1
           expect(index).toEqual(i)
@@ -31,23 +31,23 @@ describe(`AnimationComponent`, () => {
         }
 
         // Special case where time exceeds the duration, and wraps around to the first frame.
-        currentTime = animation.duration
-        index = animation.getFrameDataPreceedingTime(currentTime).index
+        currentTime = animationComponent.duration
+        index = animationComponent.getFrameIndexPreceedingTime(currentTime)
         expect(index).toEqual(0)
       })
 
       function testFrameInterpolationAtTime(interpolationTime: number) {
-        const interpolatedFrame: AnimationFrame = animation.getInterpolatedFrameAtTime(interpolationTime)
+        const interpolatedFrame: AnimationFrame = animationComponent.getInterpolatedFrameAtTime(interpolationTime)
 
-        const firstFrameData: FrameData = animation.getFrameDataPreceedingTime(interpolationTime)
-        const firstFrameDuration: number = firstFrameData.frame.duration
-        const firstFrameLoc: Vector2D = firstFrameData.frame.location
-
-        const lastFrame: AnimationFrame = firstFrameData.index == frames.length - 1 ? frames[0] : frames[firstFrameData.index + 1]
+        const [firstFrame, lastFrame]: AnimationFrame[] = animationComponent.getFramesSurroundingTime(interpolationTime)
+        const firstFrameDuration: number = firstFrame.duration
+        const firstFrameLoc: Vector2D = firstFrame.location
         const lastFrameLoc: Vector2D = lastFrame.location
         const distance: Vector2D = lastFrameLoc.subtract(firstFrameLoc)
 
-        const interpolationRatio: number = (interpolationTime - firstFrameData.startTime) / firstFrameDuration
+        const firstFrameIndex: number = animationComponent.getFrameIndexPreceedingTime(interpolationTime)
+        const firstFrameStartTime: number = animationComponent.getFrameStartTime(firstFrameIndex)
+        const interpolationRatio: number = (interpolationTime - firstFrameStartTime) / firstFrameDuration
         const expectedInterpolatedLocation: Vector2D = firstFrameLoc.add(distance.scale(interpolationRatio))
         const interpolatedTime: number = firstFrameDuration - firstFrameDuration * interpolationRatio
         const expectedFrame: AnimationFrame = new AnimationFrame(expectedInterpolatedLocation, interpolatedTime)

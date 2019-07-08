@@ -1,31 +1,24 @@
 import { AnimationFrame } from './AnimationFrame'
 
 /**
- * The AnimationFrame and relative metadata.
- */
-export interface FrameData {
-  index: number
-  frame: AnimationFrame
-  startTime: number
-}
-
-/**
  * An AnimationComponent is a piece of an Animation,
  * such as an animated leg on an animated character.
  */
 export class AnimationComponent {
-  private readonly frameData: FrameData[]
+  private readonly frames: AnimationFrame[]
+  private readonly frameStartTimes: number[]
   public readonly duration: number
 
   /**
    * @param frames The frames of the animation to be displayed.
    */
   constructor(frames: AnimationFrame[]) {
-    this.frameData = []
+    this.frames = frames
+    this.frameStartTimes = []
 
     let startTime: number = 0
     frames.forEach((frame, index) => {
-      this.frameData[index] = { index, frame, startTime }
+      this.frameStartTimes[index] = startTime
       startTime += frame.duration
     })
     this.duration = startTime
@@ -36,26 +29,42 @@ export class AnimationComponent {
    * @return A frame interpolated between the two frames which lie on either side of the given time.
    */
   public getInterpolatedFrameAtTime(seconds: number): AnimationFrame {
-    const currentFrameData = this.getFrameDataPreceedingTime(seconds)
-    const currentFrame = currentFrameData.frame
-
+    const currentFrameIndex: number = this.getFrameIndexPreceedingTime(seconds)
+    const currentFrame = this.frames[currentFrameIndex]
+    const nextFrame = this.frames[(currentFrameIndex + 1) % this.frames.length]
     // Get the next frame in the animation, which can wrap from the last frame to the first.
-    const nextFrame = this.getNextFrameData(currentFrameData.index).frame
-    const timeSinceFrameStart: number = seconds - currentFrameData.startTime
+    const timeSinceFrameStart: number = seconds - this.frameStartTimes[currentFrameIndex]
     return currentFrame.interpolateTo(nextFrame, timeSinceFrameStart)
   }
 
-  private getNextFrameData(index: number): FrameData {
-    return index == this.frameData.length - 1 ? this.frameData[0] : this.frameData[index + 1]
+  public getFrame(index: number): AnimationFrame {
+    return this.frames[index]
   }
 
-  public getFrameDataPreceedingTime(seconds: number): FrameData {
+  public getFramesSurroundingTime(seconds: number): AnimationFrame[] {
+    const firstFrameIndex: number = this.getFrameIndexPreceedingTime(seconds)
+    const secondFrameIndex: number = (firstFrameIndex + 1) % this.frames.length
+    return [this.frames[firstFrameIndex], this.frames[secondFrameIndex]]
+  }
+
+  public getFramePreceedingTime(seconds: number): AnimationFrame {
+    return this.getFrame(this.getFrameIndexPreceedingTime(seconds))
+  }
+
+  public getFrameStartTime(frameIndex: number): number {
+    return this.frameStartTimes[frameIndex]
+  }
+
+  public getFrameIndexPreceedingTime(seconds: number): number {
     // Wrap the time around to the beginning of the animation.
     seconds %= this.duration
-    // `find` could return undefined, but we ensure it doesn't by wrapping the time.
-    // This is the reason for the exclamation mark (this is thoroughly tested).
-    return this.frameData.find(data => {
-      return data.startTime <= seconds && data.startTime + data.frame.duration > seconds
-    })!
+    for (let i = 0; i < this.frames.length; i++) {
+      const frame = this.frames[i]
+      const startTime: number = this.frameStartTimes[i]
+      if (startTime <= seconds && startTime + frame.duration > seconds) {
+        return i
+      }
+    }
+    throw new Error('Error calculating frame based on time - please report this bug to the developers.')
   }
 }
