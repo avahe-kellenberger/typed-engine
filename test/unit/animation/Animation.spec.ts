@@ -9,9 +9,18 @@ describe(`AnimationComponent`, () => {
       // Interpolation occurs during an entire frame's duration until the next frame has started.
 
       const frames: AnimationFrame[] = [
-        new AnimationFrame(new Vector2D(10, 10), 1.2),
-        new AnimationFrame(new Vector2D(40, 66), 3.4),
-        new AnimationFrame(new Vector2D(200, 848), 2.5)
+        {
+          location: new Vector2D(10, 10),
+          duration: 1.2
+        },
+        {
+          location: new Vector2D(40, 66),
+          duration: 3.4
+        },
+        {
+          location: new Vector2D(200, 848),
+          duration: 2.5
+        }
       ]
 
       let animationDuration: number = 0
@@ -45,12 +54,14 @@ describe(`AnimationComponent`, () => {
         const lastFrameLoc: Vector2D = lastFrame.location
         const distance: Vector2D = lastFrameLoc.subtract(firstFrameLoc)
 
-        const firstFrameIndex: number = animationComponent.getFrameIndexPreceedingTime(interpolationTime)
-        const firstFrameStartTime: number = animationComponent.getFrameStartTime(firstFrameIndex)
+        const firstFrameStartTime: number = animationComponent.getFrameStartTime(firstFrame)
         const interpolationRatio: number = (interpolationTime - firstFrameStartTime) / firstFrameDuration
         const expectedInterpolatedLocation: Vector2D = firstFrameLoc.add(distance.scale(interpolationRatio))
         const interpolatedTime: number = firstFrameDuration - firstFrameDuration * interpolationRatio
-        const expectedFrame: AnimationFrame = new AnimationFrame(expectedInterpolatedLocation, interpolatedTime)
+        const expectedFrame: AnimationFrame = {
+          location: expectedInterpolatedLocation,
+          duration: interpolatedTime
+        }
         expect(interpolatedFrame).toEqual(expectedFrame)
       }
 

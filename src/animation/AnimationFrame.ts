@@ -1,18 +1,18 @@
 import { Vector2D } from '../math/Vector2D'
 
+export interface AnimationFrame {
+  location: Vector2D
+  duration: number
+}
+
 export class AnimationFrame {
-  public readonly location: Vector2D
-  public readonly duration: number
-
-  constructor(location: Vector2D, duration: number) {
-    this.location = location
-    this.duration = duration
-  }
-
-  public interpolateTo(frame: AnimationFrame, timeSinceFrameStart: number): AnimationFrame {
-    const interpolationRatio: number = timeSinceFrameStart / this.duration
-    const distance: Vector2D = frame.location.subtract(this.location)
-    const interpolatedLocation: Vector2D = this.location.add(distance.scale(interpolationRatio))
-    return new AnimationFrame(interpolatedLocation, this.duration - timeSinceFrameStart)
+  public static interpolate(startFrame: AnimationFrame, endFrame: AnimationFrame, timeSinceStartFrameBegan: number): AnimationFrame {
+    const interpolationRatio: number = timeSinceStartFrameBegan / startFrame.duration
+    const distance: Vector2D = endFrame.location.subtract(startFrame.location)
+    const interpolatedLocation: Vector2D = startFrame.location.add(distance.scale(interpolationRatio))
+    return {
+      location: interpolatedLocation,
+      duration: startFrame.duration - timeSinceStartFrameBegan
+    }
   }
 }
