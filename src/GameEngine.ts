@@ -1,4 +1,4 @@
-import { Updatable } from './entity/Updatable';
+import { Updatable } from './entity/Updatable'
 
 export class GameEngine {
 
@@ -11,8 +11,8 @@ export class GameEngine {
      * @param updatable The object to update.
      */
     constructor(updatable: Updatable) {
-        this.updatable = updatable;
-        this.isLooping = false;
+        this.updatable = updatable
+        this.isLooping = false
     }
 
     /**
@@ -22,19 +22,19 @@ export class GameEngine {
     private readonly loop = (): void => {
         // Exit the loop if the engine has been stopped.
         if (!this.isLooping) {
-            return;
+            return
         }
 
-        const now: number = performance.now();
+        const now: number = performance.now()
         if (this.lastTick === undefined) {
-            this.lastTick = now;
+            this.lastTick = now
         }
 
-        const elapsed: number = now - this.lastTick;
-        this.updatable.update(elapsed * 0.001);
+        const elapsed: number = now - this.lastTick
+        this.updatable.update(elapsed * 0.001)
 
-        this.lastTick = now;
-        requestAnimationFrame(this.loop);
+        this.lastTick = now
+        requestAnimationFrame(this.loop)
     }
 
     /**
@@ -43,11 +43,11 @@ export class GameEngine {
      */
     public start(): boolean {
         if (this.isLooping) {
-            return false;
+            return false
         }
-        this.isLooping = true;
-        this.loop();
-        return true;
+        this.isLooping = true
+        this.loop()
+        return true
     }
 
     /**
@@ -56,17 +56,17 @@ export class GameEngine {
      */
     public stop(): boolean {
         if (!this.isLooping) {
-            return false;
+            return false
         }
-        this.isLooping = false;
-        return true;
+        this.isLooping = false
+        return true
     }
 
     /**
      * @return If the engine is running.
      */
     public isRunning(): boolean {
-        return this.isLooping;
+        return this.isLooping
     }
 
 }

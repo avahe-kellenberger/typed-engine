@@ -1,7 +1,7 @@
-import { Entity } from '../entity/Entity';
-import { ZOrder, ZOrderListener } from '../entity/ZOrder';
-import { Rectangle } from '../math/geom/Rectangle';
-import { Vector2D } from '../math/Vector2D';
+import { Entity } from '../entity/Entity'
+import { ZOrder, ZOrderListener } from '../entity/ZOrder'
+import { Rectangle } from '../math/geom/Rectangle'
+import { Vector2D } from '../math/Vector2D'
 
 /**
  * The camera which views the game.
@@ -11,17 +11,17 @@ export class Camera extends Entity implements ZOrder {
     private viewport: Rectangle;
     private zOrder: number;
     private zOrderListeners: Set<ZOrderListener>|undefined;
-    
+
     /**
      * @param viewportSize The size of the canvas being viewed by the camera.
      * @param location The camera's starting location.
      * @param zOrder The object's Z order.
      */
     constructor(viewportSize: Vector2D, location: Vector2D = Vector2D.ZERO, zOrder: number = 0) {
-        super(location);
-        this.viewport = this.createViewport(viewportSize);
-        this.zOrder = zOrder;
-        this.addLocationListener((_, delta) => this.moveViewport(delta));
+        super(location)
+        this.viewport = this.createViewport(viewportSize)
+        this.zOrder = zOrder
+        this.addLocationListener((_, delta) => this.moveViewport(delta))
     }
 
     // #region Viewport
@@ -31,8 +31,8 @@ export class Camera extends Entity implements ZOrder {
      * @param distance The distance to move.
      */
     private moveViewport(distance: Vector2D): void {
-        const newLocation: Vector2D = this.viewport.getLocation().add(distance);
-        this.viewport = new Rectangle(newLocation, this.viewport.getSize());
+        const newLocation: Vector2D = this.viewport.getLocation().add(distance)
+        this.viewport = new Rectangle(newLocation, this.viewport.getSize())
     }
 
     /**
@@ -40,8 +40,8 @@ export class Camera extends Entity implements ZOrder {
      * @return An updated viewport.
      */
     private createViewport(size: Vector2D): Rectangle {
-        const viewportLoc: Vector2D = this.getLocation().subtract(size.scale(0.5));
-        return new Rectangle(viewportLoc, size);
+        const viewportLoc: Vector2D = this.getLocation().subtract(size.scale(0.5))
+        return new Rectangle(viewportLoc, size)
     }
 
     /**
@@ -50,7 +50,7 @@ export class Camera extends Entity implements ZOrder {
      * @return The unscaled viewport.
      */
     public getViewport(): Rectangle {
-        return this.viewport;
+        return this.viewport
     }
 
     /**
@@ -58,12 +58,12 @@ export class Camera extends Entity implements ZOrder {
      * @param newSize The new size of the viewport.
      */
     public setViewportSize(newSize: Vector2D): boolean {
-        const oldViewportSize: Vector2D = this.viewport.getSize();
+        const oldViewportSize: Vector2D = this.viewport.getSize()
         if (oldViewportSize.equals(newSize)) {
-            return false;
+            return false
         }
-        this.viewport = this.createViewport(newSize);
-        return true;
+        this.viewport = this.createViewport(newSize)
+        return true
     }
 
     // #endregion
@@ -74,7 +74,7 @@ export class Camera extends Entity implements ZOrder {
      * @override
      */
     public getZOrder(): number {
-        return this.zOrder;
+        return this.zOrder
     }
 
     /**
@@ -82,23 +82,23 @@ export class Camera extends Entity implements ZOrder {
      */
     public setZOrder(z: number): void {
         if (this.zOrder === z) {
-            return;
+            return
         }
-        const oldZ: number = this.zOrder;
-        this.zOrder = z;
+        const oldZ: number = this.zOrder
+        this.zOrder = z
         if (this.zOrderListeners !== undefined) {
-            this.zOrderListeners.forEach(listener => listener(oldZ, this.zOrder));
+            this.zOrderListeners.forEach(listener => listener(oldZ, this.zOrder))
         }
     }
-        
+
     /**
      * @override
      */
     public addZOrderListener(listener: ZOrderListener): boolean {
         if (this.zOrderListeners === undefined) {
-            this.zOrderListeners = new Set();
+            this.zOrderListeners = new Set()
         }
-        return this.zOrderListeners.size !== this.zOrderListeners.add(listener).size;
+        return this.zOrderListeners.size !== this.zOrderListeners.add(listener).size
     }
 
     /**
@@ -106,17 +106,17 @@ export class Camera extends Entity implements ZOrder {
      */
     public containsZOrderListener(listener: ZOrderListener): boolean {
         return this.zOrderListeners !== undefined &&
-               this.zOrderListeners.has(listener);
+               this.zOrderListeners.has(listener)
     }
-        
+
     /**
      * @override
      */
     public removeZOrderListener(listener: ZOrderListener): boolean {
         return this.zOrderListeners !== undefined &&
-               this.zOrderListeners.delete(listener);
+               this.zOrderListeners.delete(listener)
     }
-        
+
     // #endregion
 
 }

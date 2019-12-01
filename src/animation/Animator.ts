@@ -1,5 +1,5 @@
-import { Updatable } from '../entity/Updatable';
-import { Animation, AnimationFrame } from './Animation';
+import { Updatable } from '../entity/Updatable'
+import { Animation, AnimationFrame } from './Animation'
 
 export class Animator<AnimationID extends string> implements Updatable {
 
@@ -13,16 +13,16 @@ export class Animator<AnimationID extends string> implements Updatable {
      * @see Animator.getCurrentAnimation
      */
     constructor(animationIDMap: ReadonlyMap<AnimationID, Animation>) {
-        this.animationIDMap = animationIDMap;
-        this.currentAnimation = animationIDMap.values().next().value;
-        this.elapsedSeconds = 0;
+        this.animationIDMap = animationIDMap
+        this.currentAnimation = animationIDMap.values().next().value
+        this.elapsedSeconds = 0
     }
 
     /**
      * @return The current animation being played.
      */
     public getCurrentAnimation(): Animation|undefined {
-        return this.currentAnimation;
+        return this.currentAnimation
     }
 
     /**
@@ -31,16 +31,16 @@ export class Animator<AnimationID extends string> implements Updatable {
      * @return If the animation wasn't already playing.
      */
     public setCurrentAnimation(id: AnimationID): boolean {
-        const anim: Animation|undefined = this.animationIDMap.get(id);
+        const anim: Animation|undefined = this.animationIDMap.get(id)
         if (anim === undefined) {
-            throw new Error(`Unknown animation id \"${id}\"`);
+            throw new Error(`Unknown animation id "${id}"`)
         }
         if (anim === this.currentAnimation) {
-            return false;
+            return false
         }
-        this.currentAnimation = anim;
-        this.elapsedSeconds = 0;
-        return true;
+        this.currentAnimation = anim
+        this.elapsedSeconds = 0
+        return true
     }
 
     /**
@@ -48,9 +48,9 @@ export class Animator<AnimationID extends string> implements Updatable {
      */
     public getCurrentFrame(): AnimationFrame|undefined {
         if (this.currentAnimation === undefined) {
-            return undefined;
+            return undefined
         }
-        return this.currentAnimation.getFrameAtTime(this.elapsedSeconds);
+        return this.currentAnimation.getFrameAtTime(this.elapsedSeconds)
     }
 
     // #region Mapping
@@ -60,7 +60,7 @@ export class Animator<AnimationID extends string> implements Updatable {
      * @return The animation associated with the given ID.
      */
     public getAnimation(id: AnimationID): Animation|undefined {
-        return this.animationIDMap.get(id);
+        return this.animationIDMap.get(id)
     }
 
     /**
@@ -68,7 +68,7 @@ export class Animator<AnimationID extends string> implements Updatable {
      * @return If the animator contains an animation associated with the given ID.
      */
     public hasAnimation(id: AnimationID): boolean {
-        return this.animationIDMap.has(id);
+        return this.animationIDMap.has(id)
     }
 
     // #endregion
@@ -77,7 +77,7 @@ export class Animator<AnimationID extends string> implements Updatable {
      * @override
      */
     public update(deltaTime: number): void {
-        this.updateAnimationTime(deltaTime);
+        this.updateAnimationTime(deltaTime)
     }
 
     /**
@@ -86,10 +86,10 @@ export class Animator<AnimationID extends string> implements Updatable {
      */
     private updateAnimationTime(deltaTime: number): void {
         if (this.currentAnimation === undefined) {
-            return;
+            return
         }
-        this.elapsedSeconds += deltaTime;
-        this.elapsedSeconds %= this.currentAnimation.getDuration();
+        this.elapsedSeconds += deltaTime
+        this.elapsedSeconds %= this.currentAnimation.getDuration()
     }
 
 }

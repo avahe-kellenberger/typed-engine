@@ -1,4 +1,4 @@
-import {Camera} from "../scene/Camera";
+import {Camera} from '../scene/Camera'
 
 export interface Renderable {
     /**
@@ -15,7 +15,7 @@ export namespace Renderable {
      * @return If the object is an instance of Renderable.
      */
     export function isInstance(obj: any): obj is Renderable {
-        return obj.render !== void 0;
+        return obj.render !== void 0
     }
 }
 

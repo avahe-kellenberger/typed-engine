@@ -1,4 +1,4 @@
-import { CanvasUtils } from "../CanvasUtils";
+import { CanvasUtils } from '../CanvasUtils'
 
 export class AssetLoader {
     /**
@@ -8,14 +8,14 @@ export class AssetLoader {
      */
     public static loadImageFile(url: string): Promise<HTMLCanvasElement> {
         return new Promise((resolve, reject) => {
-            const image: HTMLImageElement = new Image();
+            const image: HTMLImageElement = new Image()
             image.onload = () => {
-                resolve(CanvasUtils.imageToCanvas(image));
-            };
+                resolve(CanvasUtils.imageToCanvas(image))
+            }
             image.onerror = (e: ErrorEvent) => {
-                reject(e);
-            };
-            image.src = url;
-        });
+                reject(e)
+            }
+            image.src = url
+        })
     }
 }

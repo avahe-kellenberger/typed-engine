@@ -1,9 +1,9 @@
-import { Renderable, RenderableCallback } from '../entity/Renderable';
-import { Updatable } from '../entity/Updatable';
-import { Game } from '../Game';
-import { InputHandler } from '../input/InputHandler';
-import { Camera } from './Camera';
-import { Layer } from './Layer';
+import { Renderable, RenderableCallback } from '../entity/Renderable'
+import { Updatable } from '../entity/Updatable'
+import { Game } from '../Game'
+import { InputHandler } from '../input/InputHandler'
+import { Camera } from './Camera'
+import { Layer } from './Layer'
 
 /**
  * Manages Layers and scene-specific input via the `inputHandler`.
@@ -22,13 +22,13 @@ export class Scene implements Updatable, Renderable {
      * @param game The game which owns the scene.
      */
     constructor(game: Game) {
-        this.inputHandler = new InputHandler(document);
-        this.layers = [];
-        this.layersSet = new Set();
-        this.layerOrderIsValid = true;
+        this.inputHandler = new InputHandler(document)
+        this.layers = []
+        this.layersSet = new Set()
+        this.layerOrderIsValid = true
 
         // Ensure all EventHandlers specific to this scene are removed.
-        game.addContentListener(() => this.inputHandler.clearEventHandlers());
+        game.addContentListener(() => this.inputHandler.clearEventHandlers())
     }
 
     /**
@@ -37,11 +37,11 @@ export class Scene implements Updatable, Renderable {
      */
     public addLayer(layer: Layer): boolean {
         if (this.layersSet.size !== this.layersSet.add(layer).size) {
-            this.layers.push(layer);
-            this.layerOrderIsValid = false;
-            return true;
+            this.layers.push(layer)
+            this.layerOrderIsValid = false
+            return true
         }
-        return false;
+        return false
     }
 
     /**
@@ -49,7 +49,7 @@ export class Scene implements Updatable, Renderable {
      * @return If the scene contains the layer.
      */
     public containsLayer(layer: Layer): boolean {
-        return this.layersSet.has(layer);
+        return this.layersSet.has(layer)
     }
 
     /**
@@ -58,10 +58,10 @@ export class Scene implements Updatable, Renderable {
      */
     public removeLayer(layer: Layer): boolean {
         if (this.layersSet.delete(layer)) {
-            this.layers.splice(this.layers.indexOf(layer), 1);
-            return true;
+            this.layers.splice(this.layers.indexOf(layer), 1)
+            return true
         }
-        return false;
+        return false
     }
 
     /**
@@ -70,9 +70,9 @@ export class Scene implements Updatable, Renderable {
      */
     private sortLayers(): Layer[] {
         if (!this.layerOrderIsValid) {
-            this.layers.sort((layer1, layer2) => layer2.getZOrder() - layer1.getZOrder());
+            this.layers.sort((layer1, layer2) => layer2.getZOrder() - layer1.getZOrder())
         }
-        return this.layers;
+        return this.layers
     }
 
     /**
@@ -80,8 +80,8 @@ export class Scene implements Updatable, Renderable {
      */
     public update(deltaTime: number): void {
         this.layers.forEach(layer => {
-            layer.update(deltaTime);
-        });
+            layer.update(deltaTime)
+        })
     }
 
     /**
@@ -89,11 +89,11 @@ export class Scene implements Updatable, Renderable {
      */
     public render(ctx: CanvasRenderingContext2D, camera: Camera, callback?: RenderableCallback): void {
         this.sortLayers().forEach(layer => {
-            layer.render(ctx, camera, callback);
-        });
+            layer.render(ctx, camera, callback)
+        })
 
         if (callback !== undefined) {
-            callback(ctx, camera);
+            callback(ctx, camera)
         }
     }
 

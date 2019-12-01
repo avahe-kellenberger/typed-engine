@@ -25,8 +25,8 @@ export class InputHandler {
      * @param document The document on which to listen for input events.
      */
     constructor(document: HTMLDocument) {
-        this.document = document;
-        this.eventHandlers = new Set();
+        this.document = document
+        this.eventHandlers = new Set()
     }
 
     /**
@@ -36,27 +36,27 @@ export class InputHandler {
      */
     public addEventHandler(handler: EventHandler): boolean {
         if (this.eventHandlers.size === this.eventHandlers.add(handler).size) {
-            return false;
+            return false
         }
         handler.types.forEach(type => {
-            this.document.addEventListener(type, handler.listener);
-        });
-        return true;
+            this.document.addEventListener(type, handler.listener)
+        })
+        return true
     }
 
     /**
      * Removes an `EventHandler` from the DOM.
      * @param handler The event handler.
-     * @return If the event handler had already been added. 
+     * @return If the event handler had already been added.
      */
     public removeEventHandler(handler: EventHandler): boolean {
         if (!this.eventHandlers.delete(handler)) {
-            return false;
+            return false
         }
         handler.types.forEach(type => {
-            this.document.removeEventListener(type, handler.listener);
-        });
-        return true;
+            this.document.removeEventListener(type, handler.listener)
+        })
+        return true
     }
 
     /**
@@ -65,9 +65,9 @@ export class InputHandler {
     public clearEventHandlers(): void {
         this.eventHandlers.forEach(handler => {
             handler.types.forEach(type => {
-                this.document.removeEventListener(type, handler.listener);
-            });
-        });
+                this.document.removeEventListener(type, handler.listener)
+            })
+        })
     }
 
 }
