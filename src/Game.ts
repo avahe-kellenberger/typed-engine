@@ -29,37 +29,37 @@ export class Game implements Renderable {
      * @see `Game.start()`
      */
     constructor(ctx: CanvasRenderingContext2D, content?: Content) {
-        this.ctx = ctx
-        this.content = content
-        this.engine = new GameEngine(this)
-        const canvasSize: Vector2D = new Vector2D(ctx.canvas.width, ctx.canvas.height)
-        this.camera = new Camera(canvasSize)
-        this.inputHandler = new InputHandler(document)
+      this.ctx = ctx
+      this.content = content
+      this.engine = new GameEngine(this)
+      const canvasSize: Vector2D = new Vector2D(ctx.canvas.width, ctx.canvas.height)
+      this.camera = new Camera(canvasSize)
+      this.inputHandler = new InputHandler(document)
 
-        window.addEventListener('load', this.fitCanvasToParent)
-        window.addEventListener('resize', this.fitCanvasToParent)
+      window.addEventListener('load', this.fitCanvasToParent)
+      window.addEventListener('resize', this.fitCanvasToParent)
     }
 
     /**
      * Ensures that the game's canvas fits its parent element.
      */
     private fitCanvasToParent = (): void => {
-        const canvas: HTMLCanvasElement = this.ctx.canvas
-        const canvasParent: HTMLElement|null = canvas.parentElement
-        if (canvasParent !== null) {
-            const parentBounds = canvasParent.getBoundingClientRect()
-            if (canvas.width !== parentBounds.width || canvas.height !== parentBounds.height) {
-                canvas.width = parentBounds.width
-                canvas.height = parentBounds.height
-            }
+      const canvas: HTMLCanvasElement = this.ctx.canvas
+      const canvasParent: HTMLElement|null = canvas.parentElement
+      if (canvasParent !== null) {
+        const parentBounds = canvasParent.getBoundingClientRect()
+        if (canvas.width !== parentBounds.width || canvas.height !== parentBounds.height) {
+          canvas.width = parentBounds.width
+          canvas.height = parentBounds.height
         }
+      }
     }
 
     /**
      * @return The content of the game.
      */
     public getContent(): Content|undefined {
-        return this.content
+      return this.content
     }
 
     /**
@@ -70,7 +70,7 @@ export class Game implements Renderable {
      * @param content The content to update and/or render.
      */
     public setContent(content: Content|undefined): void {
-        this.content = content
+      this.content = content
     }
 
     /**
@@ -78,10 +78,10 @@ export class Game implements Renderable {
      * @return If the listener had not previously been added to the game.
      */
     public addContentListener(listener: ChangeListener<Content|undefined>): boolean {
-        if (this.contentChangedListeners === undefined) {
-            this.contentChangedListeners = new Set()
-        }
-        return this.contentChangedListeners.size !== this.contentChangedListeners.add(listener).size
+      if (this.contentChangedListeners === undefined) {
+        this.contentChangedListeners = new Set()
+      }
+      return this.contentChangedListeners.size !== this.contentChangedListeners.add(listener).size
     }
 
     /**
@@ -89,51 +89,51 @@ export class Game implements Renderable {
      * @return If the listener had previously been added to the game.
      */
     public removeContentListener(listener: ChangeListener<Content|undefined>): boolean {
-        if (this.contentChangedListeners === undefined) {
-            return false
-        }
-        return this.contentChangedListeners.delete(listener)
+      if (this.contentChangedListeners === undefined) {
+        return false
+      }
+      return this.contentChangedListeners.delete(listener)
     }
 
     /**
      * @return The camera viewing the game.
      */
     public getCamera(): Camera {
-        return this.camera
+      return this.camera
     }
 
     /**
      * Starts/resumes the game.
      */
     public start(): boolean {
-        return this.engine.start()
+      return this.engine.start()
     }
 
     /**
      * Stops/pauses the game.
      */
     public stop(): boolean {
-        return this.engine.stop()
+      return this.engine.stop()
     }
 
     /**
      * @override
      */
     public update(deltaTime: number): void {
-        if (this.content !== undefined) {
-            this.content.update(deltaTime)
-            this.render(this.ctx, this.camera)
-        }
+      if (this.content !== undefined) {
+        this.content.update(deltaTime)
+        this.render(this.ctx, this.camera)
+      }
     }
 
     /**
      * @override
      */
     public render(ctx: CanvasRenderingContext2D, camera: Camera, callback?: RenderableCallback): void {
-        if (this.content !== undefined) {
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-            this.content.render(ctx, camera, callback)
-        }
+      if (this.content !== undefined) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        this.content.render(ctx, camera, callback)
+      }
     }
 
 }

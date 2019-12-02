@@ -14,8 +14,8 @@ export class AnimatedSprite<AnimationID extends string> extends GameObject {
      * @param animationIDMap The animations of the sprite mapped to their respective IDs.
      */
     constructor(animationIDMap: ReadonlyMap<AnimationID, Animation>) {
-        super()
-        this.animator = new Animator(animationIDMap)
+      super()
+      this.animator = new Animator(animationIDMap)
     }
 
     /**
@@ -23,29 +23,29 @@ export class AnimatedSprite<AnimationID extends string> extends GameObject {
      * @param id The ID of the animation.
      */
     public setCurrentAnimation(id: AnimationID): void {
-        this.animator.setCurrentAnimation(id)
+      this.animator.setCurrentAnimation(id)
     }
 
     /**
      * @override
      */
     public update(deltaTime: number): void {
-        super.update(deltaTime)
-        this.animator.update(deltaTime)
+      super.update(deltaTime)
+      this.animator.update(deltaTime)
     }
 
     /**
      * @override
      */
     public render(ctx: CanvasRenderingContext2D, camera: Camera): void {
-        super.render(ctx, camera, () => {
-            const frame: AnimationFrame|undefined = this.animator.getCurrentFrame()
-            if (frame !== undefined) {
-                const offsetX: number = frame.canvas.width - 0.5
-                const offsetY: number = frame.canvas.height - 0.5
-                ctx.drawImage(frame.canvas, offsetX, offsetY)
-            }
-        })
+      super.render(ctx, camera, () => {
+        const frame: AnimationFrame|undefined = this.animator.getCurrentFrame()
+        if (frame !== undefined) {
+          const offsetX: number = frame.canvas.width - 0.5
+          const offsetY: number = frame.canvas.height - 0.5
+          ctx.drawImage(frame.canvas, offsetX, offsetY)
+        }
+      })
     }
 
 }

@@ -11,6 +11,6 @@ export namespace Updatable {
      * @return If the object is an instance of Updatable.
      */
     export function isInstance(obj: any): obj is Updatable {
-        return obj.update !== void 0
+      return obj.update !== void 0
     }
 }

@@ -13,7 +13,7 @@ export class Entity implements Locatable {
      * @param location The object's location.
      */
     constructor(location: Vector2D = Vector2D.ZERO) {
-        this.location = location
+      this.location = location
     }
 
     // #region Locatable
@@ -22,14 +22,14 @@ export class Entity implements Locatable {
      * @override
      */
     public getLocation(): Vector2D {
-        return this.location
+      return this.location
     }
 
     /**
      * @override
      */
     public move(distance: Vector2D): void {
-        this.setLocation(this.location.add(distance))
+      this.setLocation(this.location.add(distance))
     }
 
     /**
@@ -48,38 +48,38 @@ export class Entity implements Locatable {
      * Overload function.
      */
     public setLocation(locationOrX: Vector2D|number, y?: number): void {
-        if (!(locationOrX instanceof Vector2D)) {
-            if (y === undefined) {
-                throw new Error('')
-            }
-            this.setLocation(new Vector2D(locationOrX, y))
-        } else {
-            if (locationOrX.equals(this.location)) {
-                return
-            }
-            const delta: Vector2D = locationOrX.subtract(this.location)
-            this.location = locationOrX
-            if (this.locationListeners !== undefined) {
-                this.locationListeners.forEach(listener => listener(this.location, delta))
-            }
+      if (!(locationOrX instanceof Vector2D)) {
+        if (y === undefined) {
+          throw new Error('')
         }
+        this.setLocation(new Vector2D(locationOrX, y))
+      } else {
+        if (locationOrX.equals(this.location)) {
+          return
+        }
+        const delta: Vector2D = locationOrX.subtract(this.location)
+        this.location = locationOrX
+        if (this.locationListeners !== undefined) {
+          this.locationListeners.forEach(listener => listener(this.location, delta))
+        }
+      }
     }
 
     /**
      * @override
      */
     public addLocationListener(listener: LocationListener): boolean {
-        if (this.locationListeners === undefined) {
-            this.locationListeners = new Set()
-        }
-        return this.locationListeners.size !== this.locationListeners.add(listener).size
+      if (this.locationListeners === undefined) {
+        this.locationListeners = new Set()
+      }
+      return this.locationListeners.size !== this.locationListeners.add(listener).size
     }
 
     /**
      * @override
      */
     public containsLocationListener(listener: LocationListener): boolean {
-        return this.locationListeners !== undefined &&
+      return this.locationListeners !== undefined &&
                this.locationListeners.has(listener)
     }
 
@@ -87,11 +87,11 @@ export class Entity implements Locatable {
      * @override
      */
     public removeLocationListener(listener: LocationListener): boolean {
-        return this.locationListeners !== undefined &&
+      return this.locationListeners !== undefined &&
                this.locationListeners.delete(listener)
     }
 
-    // #endregion
+  // #endregion
 
 }
 

@@ -25,8 +25,8 @@ export class InputHandler {
      * @param document The document on which to listen for input events.
      */
     constructor(document: HTMLDocument) {
-        this.document = document
-        this.eventHandlers = new Set()
+      this.document = document
+      this.eventHandlers = new Set()
     }
 
     /**
@@ -35,13 +35,13 @@ export class InputHandler {
      * @return If the event handler had not already been added.
      */
     public addEventHandler(handler: EventHandler): boolean {
-        if (this.eventHandlers.size === this.eventHandlers.add(handler).size) {
-            return false
-        }
-        handler.types.forEach(type => {
-            this.document.addEventListener(type, handler.listener)
-        })
-        return true
+      if (this.eventHandlers.size === this.eventHandlers.add(handler).size) {
+        return false
+      }
+      handler.types.forEach(type => {
+        this.document.addEventListener(type, handler.listener)
+      })
+      return true
     }
 
     /**
@@ -50,24 +50,24 @@ export class InputHandler {
      * @return If the event handler had already been added.
      */
     public removeEventHandler(handler: EventHandler): boolean {
-        if (!this.eventHandlers.delete(handler)) {
-            return false
-        }
-        handler.types.forEach(type => {
-            this.document.removeEventListener(type, handler.listener)
-        })
-        return true
+      if (!this.eventHandlers.delete(handler)) {
+        return false
+      }
+      handler.types.forEach(type => {
+        this.document.removeEventListener(type, handler.listener)
+      })
+      return true
     }
 
     /**
      * Removes all event handlers.
      */
     public clearEventHandlers(): void {
-        this.eventHandlers.forEach(handler => {
-            handler.types.forEach(type => {
-                this.document.removeEventListener(type, handler.listener)
-            })
+      this.eventHandlers.forEach(handler => {
+        handler.types.forEach(type => {
+          this.document.removeEventListener(type, handler.listener)
         })
+      })
     }
 
 }

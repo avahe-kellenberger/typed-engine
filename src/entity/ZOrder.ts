@@ -15,7 +15,7 @@ export namespace ZOrder {
      * @return If the object is an instance of Zorder.
      */
     export function isInstance(obj: any): obj is ZOrder {
-        return obj.setZOrder !== void 0 &&
+      return obj.setZOrder !== void 0 &&
                IZOrder.isInstance(obj)
     }
 }
@@ -56,7 +56,7 @@ export namespace IZOrder {
      * @return If the object is an instance of IZorder.
      */
     export function isInstance(obj: any): obj is IZOrder {
-        return obj.getZOrder !== void 0 &&
+      return obj.getZOrder !== void 0 &&
                obj.containsZOrderListener !== void 0 &&
                obj.addZOrderListener !== void 0 &&
                obj.removeZOrderListener !== void 0

@@ -21,18 +21,18 @@ export class Task implements Updatable {
     constructor(updatable: Updatable,
                 completionCondition: () => boolean,
                 onCompleted?: (totalElaspedTime: number) => void) {
-        this.updatable = updatable
-        this.completionCondition = completionCondition
-        this.onCompleted = onCompleted
-        this.completed = false
-        this.elapsedTime = 0
+      this.updatable = updatable
+      this.completionCondition = completionCondition
+      this.onCompleted = onCompleted
+      this.completed = false
+      this.elapsedTime = 0
     }
 
     /**
      * @returns If the task has completed.
      */
     public hasCompleted(): boolean {
-        return this.completed
+      return this.completed
     }
 
     /**
@@ -40,14 +40,14 @@ export class Task implements Updatable {
      * @param completed If the task should be set as completed or not.
      */
     public setCompleted(completed: boolean): void {
-        this.completed = completed
+      this.completed = completed
     }
 
     /**
      * @returns The collective elasped time the task has been updated with (see `Updatable`).
      */
     public getElapsedTime(): number {
-        return this.elapsedTime
+      return this.elapsedTime
     }
 
     /**
@@ -56,24 +56,24 @@ export class Task implements Updatable {
      * @param elapsedTime The time elapsed.
      */
     public setElapsedTime(elapsedTime: number): void {
-        this.elapsedTime = elapsedTime
+      this.elapsedTime = elapsedTime
     }
 
     /**
      * @override
      */
     public update(elapsedTime: number): void {
-        if (this.completed) {
-            throw new Error('The task has completed, therefore it cannot be updated.')
+      if (this.completed) {
+        throw new Error('The task has completed, therefore it cannot be updated.')
+      }
+      this.setElapsedTime(this.elapsedTime + elapsedTime)
+      this.updatable.update(elapsedTime)
+      if (this.completionCondition()) {
+        this.completed = true
+        if (this.onCompleted != null) {
+          this.onCompleted(this.elapsedTime)
         }
-        this.setElapsedTime(this.elapsedTime + elapsedTime)
-        this.updatable.update(elapsedTime)
-        if (this.completionCondition()) {
-            this.completed = true
-            if (this.onCompleted != null) {
-                this.onCompleted(this.elapsedTime)
-            }
-        }
+      }
     }
 
 }
