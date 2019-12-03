@@ -1,9 +1,9 @@
-import { Vector2D } from '../math/Vector2D';
+import { Vector2D } from '../math/Vector2D'
 
 export interface Locatable extends ILocatable {
-    
+
     /**
-     * @param distance The distance to move the object. 
+     * @param distance The distance to move the object.
      */
     move(distance: Vector2D): void;
 
@@ -33,7 +33,7 @@ export interface Locatable extends ILocatable {
 }
 
 export interface ILocatable {
-    
+
     /**
      * @return The object's center location.
      */

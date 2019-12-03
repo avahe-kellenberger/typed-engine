@@ -1,6 +1,6 @@
 # typed-engine
 
-[![Build Status](https://travis-ci.org/avahe-kellenberger/typed-engine.svg?branch=master)](https://travis-ci.org/avahe-kellenberger/typed-engine)
+[![CircleCI](https://circleci.com/gh/avahe-kellenberger/typed-engine.svg?style=svg)](https://circleci.com/gh/avahe-kellenberger/typed-engine)
 
 2D Game Engine in TypeScript
 

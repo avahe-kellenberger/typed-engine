@@ -1,8 +1,8 @@
 import { Vector2D } from '../math/Vector2D'
 
 export interface AnimationFrame {
-  location: Vector2D
-  duration: number
+  location: Vector2D;
+  duration: number;
 }
 
 export class AnimationFrame {
