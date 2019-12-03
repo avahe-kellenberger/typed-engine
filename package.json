@@ -24,8 +24,8 @@
     "webpack-dev-server": "^3.2.1"
   },
   "scripts": {
-    "lint": "eslint --quiet --ext .ts src",
-    "lint-fix": "eslint --quiet --fix --ext .ts src",
+    "lint": "eslint --quiet --ext .ts src test",
+    "lint-fix": "eslint --quiet --fix --ext .ts src test",
     "test": "jest test/",
     "example-launch": "concurrently --kill-others 'webpack --context ./example --config ./example/webpack.config.js --mode development --watch' 'electron ./example/src/index.html'"
   }
