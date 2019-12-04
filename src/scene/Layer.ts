@@ -90,7 +90,7 @@ export class Layer implements ZOrder, Updatable, Renderable {
      * @override
      */
     public addZOrderListener(listener: ZOrderListener): boolean {
-      if (this.zOrderListeners! === undefined) {
+      if (this.zOrderListeners === undefined) {
         this.zOrderListeners = new Set()
       }
       return this.zOrderListeners.size !== this.zOrderListeners.add(listener).size

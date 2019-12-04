@@ -47,7 +47,7 @@ export class Game implements Renderable {
       const canvas: HTMLCanvasElement = this.ctx.canvas
       const canvasParent: HTMLElement|null = canvas.parentElement
       if (canvasParent !== null) {
-        const parentBounds = canvasParent.getBoundingClientRect()
+        const parentBounds: DOMRect = canvasParent.getBoundingClientRect()
         if (canvas.width !== parentBounds.width || canvas.height !== parentBounds.height) {
           canvas.width = parentBounds.width
           canvas.height = parentBounds.height

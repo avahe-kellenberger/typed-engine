@@ -5,20 +5,20 @@ import { AnimationFrame } from './AnimationFrame'
  * such as an animated leg on an animated character.
  */
 export class AnimationComponent {
-  // AnimationFrame, startTime
+
   private readonly frames: AnimationFrame[]
   private readonly frameStartTimes: number[]
   public readonly duration: number
 
   /**
-   * @param frames The frames of the animation to be displayed.
+   * @param {AnimationFrame[]} frames - The frames of the animation to be displayed.
    */
   constructor(frames: AnimationFrame[]) {
     this.frames = []
     this.frameStartTimes = []
 
     let startTime: number = 0
-    frames.forEach(frame => {
+    frames.forEach((frame: AnimationFrame) => {
       this.frames.push(frame)
       this.frameStartTimes.push(startTime)
       startTime += frame.duration
@@ -31,7 +31,7 @@ export class AnimationComponent {
   }
 
   /**
-   * @return The start time of the given frame, or -1 if the frame isn't part of this component.
+   * @return {number} The start time of the given frame, or -1 if the frame isn't part of this component.
    */
   public getFrameStartTime(frame: AnimationFrame): number {
     for (let i = 0; i < this.frames.length; i++) {
@@ -43,18 +43,21 @@ export class AnimationComponent {
   }
 
   /**
-   * @param seconds The number of seconds elapsed since the animation began.
-   * @return A frame interpolated between the two frames which lie on either side of the given time.
+   * @param {number} seconds - The number of seconds elapsed since the animation began.
+   * @return {AnimationFrame} A frame interpolated between the two frames which lie on either side of the given time.
    */
   public getInterpolatedFrameAtTime(seconds: number): AnimationFrame {
     const currentFrameIndex: number = this.getFrameIndexPreceedingTime(seconds)
-    const currentFrame = this.frames[currentFrameIndex]
-    const nextFrame = this.frames[(currentFrameIndex + 1) % this.frames.length]
+    const currentFrame: AnimationFrame = this.frames[currentFrameIndex]
+    const nextFrameIndex: number = this.getNextFrameIndex(currentFrameIndex)
+    const nextFrame: AnimationFrame = this.frames[nextFrameIndex]
     // Get the next frame in the animation, which can wrap from the last frame to the first.
-
-    // TODO: Index
     const timeSinceFrameStart: number = seconds - this.frameStartTimes[currentFrameIndex]
     return AnimationFrame.interpolate(currentFrame, nextFrame, timeSinceFrameStart)
+  }
+
+  private getNextFrameIndex(currentFrameIndex: number): number {
+    return (currentFrameIndex + 1) % this.frames.length
   }
 
   public getFramesSurroundingTime(seconds: number): AnimationFrame[] {
@@ -67,8 +70,8 @@ export class AnimationComponent {
     // Wrap the time around to the beginning of the animation.
     seconds %= this.duration
     for (let i = 0; i < this.frames.length; i++) {
-      const frame = this.frames[i]
-      const startTime = this.frameStartTimes[i]
+      const frame: AnimationFrame = this.frames[i]
+      const startTime: number = this.frameStartTimes[i]
       if (startTime <= seconds && startTime + frame.duration > seconds) {
         return i
       }
