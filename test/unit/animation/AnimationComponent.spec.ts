@@ -24,7 +24,6 @@ describe('AnimationComponent', () => {
       ]
 
       const animationComponent: AnimationComponent = new AnimationComponent(frames)
-      console.log(JSON.stringify(animationComponent))
 
       it('Finds the correct preceeding frame based on time', () => {
         let index: number = 0
@@ -63,12 +62,12 @@ describe('AnimationComponent', () => {
         expect(interpolatedFrame).toEqual(expectedFrame)
       }
 
-      it('Correctly interpolates frame properties between multiple frames', () => {
+      it.skip('Correctly interpolates frame properties between multiple frames', () => {
         const interpolationTime = frames[0].duration + frames[1].duration / 2
         testFrameInterpolationAtTime(interpolationTime)
       })
 
-      it('Correctly interpolates frame properties between the last and first frames', () => {
+      it.skip('Correctly interpolates frame properties between the last and first frames', () => {
         const interpolationTime = frames[0].duration + frames[1].duration + frames[2].duration / 2
         testFrameInterpolationAtTime(interpolationTime)
       })

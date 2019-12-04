@@ -1,21 +1,21 @@
 module.exports = {
-    
-    // An array of file extensions your modules use
-    moduleFileExtensions: ['js', 'ts', 'tsx'],
 
-    // A list of paths to directories that Jest should use to search for files in
-    roots: ['<rootDir>/test'],
+  // An array of file extensions your modules use
+  moduleFileExtensions: ['js', 'ts', 'tsx'],
 
-    // The regexp pattern or array of patterns that Jest uses to detect test files
-    testRegex: ['.*\.spec\..*'],
+  // A list of paths to directories that Jest should use to search for files in
+  roots: ['<rootDir>/test'],
 
-    // A map from regular expressions to paths to transformers
-    transform: {
-        '\\.(ts|tsx)$': 'ts-jest'
-    },
+  // The regexp pattern or array of patterns that Jest uses to detect test files
+  testRegex: ['.*\\.spec\\..*'],
 
-    testEnvironment: 'jsdom',
+  // A map from regular expressions to paths to transformers
+  transform: {
+    '\\.(ts|tsx)$': 'ts-jest'
+  },
 
-    setupFiles: ["<rootDir>/test/setup.ts"]
+  testEnvironment: 'jsdom',
 
-};
+  setupFiles: ['<rootDir>/test/setup.ts']
+
+}

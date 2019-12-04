@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "../.eslintrc.json",
+    "plugin:jest/recommended"
+  ],
+  "env": {
+    "es6": true,
+    "jest": true
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.spec.ts"
+      ],
+      "env": {
+        "jest": true
+      },
+      "plugins": ["jest"],
+      "rules": {}
+    }
+  ]
+}
+
